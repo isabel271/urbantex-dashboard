@@ -1,0 +1,40 @@
+{
+ "rows": [
+  {
+   "semana": "2026-11-16",
+   "orden": 1,
+   "cuando": "Siguiente · desde el 24 nov",
+   "nombre": "Maquinaria · Dic",
+   "contenido_estado": "Ya publicado",
+   "contenido": "Reel «Conseguí la misma máquina más barata» (10 nov)",
+   "link": "https://www.instagram.com/reel/DfkO074hc3D/",
+   "objetivo": "Conversaciones de WhatsApp con formulario de 2 preguntas (qué máquina y presupuesto)",
+   "publico": "Venezuela ampliado + Andes · 30-65",
+   "presupuesto": "$7/día, 14 días",
+   "por_que": "Es el 3.er reel del mes (1.232 vistas en Instagram) y no hay que producir nada.|Maquinaria es un ticket alto: atrae menos chats pero de mejor calidad, que es el objetivo.|Habla de ahorro gracias a la negociación, no de descuentos: nos separa de Pinchili.|El formulario filtra antes de que Isabel atienda, que hoy es el cuello de botella.",
+   "meta": "Menos de $1,50 por chat y al menos 1 llamada cada 8 chats",
+   "condicion": "Prenderla solo si «Orden cambia · Nov» cumple su primera semana (hasta el 24 nov) sin fatiga y sin saturar los chats.",
+   "guion": null,
+   "responsable": "Isabel",
+   "estado": "Propuesta"
+  },
+  {
+   "semana": "2026-11-16",
+   "orden": 2,
+   "cuando": "Después · desde el 8 dic",
+   "nombre": "Cantón abril 2027 · Acompañamiento",
+   "contenido_estado": "Por crear",
+   "contenido": "Reel nuevo de Domingo explicando el acompañamiento en la feria. Mientras se graba se puede usar el reel F1 de la feria (15 oct).",
+   "link": null,
+   "objetivo": "Conversaciones de WhatsApp de empresarios que piensan viajar a la feria",
+   "publico": "Venezuela ampliado + Andes · 30-65",
+   "presupuesto": "$7/día hasta fin de enero",
+   "por_que": "Pinchili ya vende cupos para abril y dice que agotó los de la edición pasada: quien reserve primero se queda con esos empresarios.|Es el servicio de mayor ticket (acompañamiento de USD 650 por día) y los cupos son limitados.|La campaña de la feria de octubre costó $0,67 por chat y trajo llamadas.",
+   "meta": "Menos de $1,00 por chat y al menos 2 llamadas por semana",
+   "condicion": "Grabar antes del 5 dic.",
+   "guion": "Abrir con una escena real en la feria o en una fábrica (primeros 3 segundos).|Qué incluye: traducción, visitas a fábricas, negociación en el sitio.|Cupos limitados por temporada.|Cierre: «Escríbenos FERIA por WhatsApp para reservar».",
+   "responsable": "Domingo graba · Gaby edita · Isabel pauta",
+   "estado": "Propuesta"
+  }
+ ]
+}

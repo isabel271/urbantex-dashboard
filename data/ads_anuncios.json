@@ -1,0 +1,49 @@
+{
+ "rows": [
+  {
+   "anuncio": "V2 · Juan Carlos MDF",
+   "campana": "Fabricantes directos · Oct",
+   "periodo": "19–26 oct",
+   "conversaciones": 81,
+   "costo_conv": 0.6,
+   "frecuencia": null,
+   "estado": "Apagado"
+  },
+  {
+   "anuncio": "F1 · Reel Feria 15 oct",
+   "campana": "Feria de Cantón · Oct",
+   "periodo": "19–26 oct",
+   "conversaciones": 78,
+   "costo_conv": 0.67,
+   "frecuencia": null,
+   "estado": "Apagado"
+  },
+  {
+   "anuncio": "V5 · Keramix",
+   "campana": "Fabricantes directos · Oct",
+   "periodo": "19–26 oct",
+   "conversaciones": 42,
+   "costo_conv": 0.72,
+   "frecuencia": null,
+   "estado": "Apagado"
+  },
+  {
+   "anuncio": "V7 · ¿Qué pasa si pagas en China…?",
+   "campana": "Fabricantes directos · Oct",
+   "periodo": "19–26 oct",
+   "conversaciones": 7,
+   "costo_conv": 2.12,
+   "frecuencia": null,
+   "estado": "Apagado"
+  },
+  {
+   "anuncio": "N1 · Orden cambia 9 nov",
+   "campana": "Orden cambia · Nov",
+   "periodo": "11–17 nov (solo entregó el 17, parcial)",
+   "conversaciones": 4,
+   "costo_conv": 0.56,
+   "frecuencia": 1.09,
+   "estado": "Activo"
+  }
+ ]
+}

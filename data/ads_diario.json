@@ -1,0 +1,15 @@
+{
+ "rows": [
+  {
+   "fecha": "2026-11-17",
+   "campana": "Orden cambia · Nov",
+   "gasto": 2.23,
+   "conversaciones": 4,
+   "costo_conv": 0.56,
+   "impresiones": 812,
+   "alcance": 744,
+   "ctr": 1.35,
+   "frecuencia_acumulada": 1.09
+  }
+ ]
+}

@@ -1,0 +1,52 @@
+{
+ "rows": [
+  {
+   "semana": "2026-11-16",
+   "tipo": "Estrategia",
+   "propuesta": "Abrir ya las reservas para la Feria de Cantón de abril 2027",
+   "por_que": "Pinchili ya está vendiendo cupos y dice que agotó los de esta edición 30 días antes; quien reserve primero se queda con esos empresarios.",
+   "responsable": "Isabel / Domingo",
+   "estado": "Propuesta"
+  },
+  {
+   "semana": "2026-11-16",
+   "tipo": "Ads",
+   "propuesta": "Probar un «Comenta FÁBRICA» conectado al bot Toyo",
+   "por_que": "Los 78 anuncios activos de Pinchili usan esa mecánica; con el bot, el comentario se vuelve un lead ya calificado por presupuesto.",
+   "responsable": "Isabel",
+   "estado": "Propuesta"
+  },
+  {
+   "semana": "2026-11-16",
+   "tipo": "Ads",
+   "propuesta": "Medir «Orden cambia · Nov» por llamadas, no por conversaciones",
+   "por_que": "El objetivo es menos leads pero mejores; un costo por conversación bajo no sirve si no llegan llamadas.",
+   "responsable": "Isabel",
+   "estado": "En curso"
+  },
+  {
+   "semana": "2026-11-16",
+   "tipo": "Ads",
+   "propuesta": "Armar la campaña de Maquinaria con el reel «la misma máquina más barata» y formulario de WhatsApp",
+   "por_que": "El formulario filtra por presupuesto antes de la conversación, que es justo el objetivo de calidad.",
+   "responsable": "Isabel",
+   "estado": "Propuesta"
+  },
+  {
+   "semana": "2026-11-16",
+   "tipo": "Contenido",
+   "propuesta": "Publicar el capítulo 3 de la fábrica venezolana",
+   "por_que": "El capítulo 1 es el reel más compartido del mes (13 veces), pero el 2 cayó a 576 vistas: falta cerrar la historia con un gancho fuerte.",
+   "responsable": "Yeni / Gaby",
+   "estado": "Propuesta"
+  },
+  {
+   "semana": "2026-11-16",
+   "tipo": "Contenido",
+   "propuesta": "Pedirle a Domingo el reel 1A",
+   "por_que": "Sigue pendiente desde octubre y es la pieza que Yeni planeó para Fabricantes.",
+   "responsable": "Yeni",
+   "estado": "Pendiente"
+  }
+ ]
+}

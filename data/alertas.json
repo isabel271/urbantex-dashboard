@@ -1,0 +1,18 @@
+{
+ "rows": [
+  {
+   "fecha": "2026-11-17",
+   "nivel": "Info",
+   "tipo": "«Orden cambia · Nov» ya está corriendo",
+   "mensaje": "Primer día de entrega: $2,23 gastados, 4 conversaciones a $0,56 cada una, 812 impresiones.",
+   "accion": "No tocarla en 3–4 días; medirla por llamadas agendadas."
+  },
+  {
+   "fecha": "2026-11-17",
+   "nivel": "Media",
+   "tipo": "Dos campañas viejas siguen «activas»",
+   "mensaje": "«Feria de Cantón · Oct» y «Publicación de Instagram: ¿Ya automatizaste una...» figuran activas en Meta pero no gastan.",
+   "accion": "Apagarlas en Ads Manager para ordenar la cuenta."
+  }
+ ]
+}

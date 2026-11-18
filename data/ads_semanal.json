@@ -1,0 +1,40 @@
+{
+ "rows": [
+  {
+   "clave": "2026-10-02|Avícola (V4)",
+   "semana_inicio": "2026-10-02",
+   "periodo": "2–9 oct",
+   "campana": "Avícola (V4)",
+   "gasto": 103.51,
+   "conversaciones": 115,
+   "costo_conv": 0.9
+  },
+  {
+   "clave": "2026-10-11|Empresarios VE · Oct",
+   "semana_inicio": "2026-10-11",
+   "periodo": "11–18 oct",
+   "campana": "Empresarios VE · Oct",
+   "gasto": 42.91,
+   "conversaciones": 133,
+   "costo_conv": 0.32
+  },
+  {
+   "clave": "2026-10-19|Fabricantes directos · Oct",
+   "semana_inicio": "2026-10-19",
+   "periodo": "19–26 oct",
+   "campana": "Fabricantes directos · Oct",
+   "gasto": 93.65,
+   "conversaciones": 130,
+   "costo_conv": 0.72
+  },
+  {
+   "clave": "2026-10-19|Feria de Cantón · Oct",
+   "semana_inicio": "2026-10-19",
+   "periodo": "19–26 oct",
+   "campana": "Feria de Cantón · Oct",
+   "gasto": 52.23,
+   "conversaciones": 78,
+   "costo_conv": 0.67
+  }
+ ]
+}

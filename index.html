@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Urbantex · Ads y contenido</title>
+<style>
+:root{--font-anthropic-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--font-anthropic-serif:Georgia,"Times New Roman",serif}
+[hidden]{display:none!important}
+html,body{margin:0;background:#EDE7DE}
+body{padding:16px}
+.ux-copy{max-width:1120px;margin:10px auto 0;font:12px/1.4 system-ui,sans-serif;color:#7A766F;text-align:center}
+</style>
+<script src="d3.min.js"></script>
+<script>
+window.dash = (function(){
+  const IDS = ["resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","propuestas","proxima_campana","embudo","alertas"];
+  const raw = {}, failed = {}, calcs = {}, draws = {}, hooks = [];
+  function data(id){
+    if (calcs[id]) {
+      const c = calcs[id], ins = c.inputs.map(k => raw[k]);
+      if (c.inputs.some(k => failed[k])) return {status:"error", data:[]};
+      if (ins.some(x => !x)) return {status:"loading", data:[]};
+      try { return {status:"ok", data:c.fn(...ins)}; } catch(e) { console.error(id, e); return {status:"error", data:[]}; }
+    }
+    if (raw[id]) return {status:"ok", data:raw[id]};
+    return {status: failed[id] ? "error" : "loading", data:[]};
+  }
+  function render(){
+    Object.keys(draws).forEach(n => document.querySelectorAll('[data-draw="' + n + '"]').forEach(el => { try { draws[n](el); } catch(e) { console.error(n, e); } }));
+    hooks.forEach(h => { try { h(); } catch(e) {} });
+  }
+  function load(){
+    const v = Date.now();
+    return Promise.all(IDS.map(id => fetch("data/" + id + ".json?v=" + v).then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(j => { raw[id] = Array.isArray(j) ? j : (j.rows || []); }).catch(() => { failed[id] = 1; }))).then(render);
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    load();
+    document.querySelectorAll("[data-tab]").forEach(b => b.addEventListener("click", () => setTimeout(render, 0)));
+    let t; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(render, 200); });
+  });
+  return {
+    data, draw:(n, fn) => { draws[n] = fn; }, calc:(id, d) => { calcs[id] = d; }, onData:fn => hooks.push(fn),
+    setLink:id => { try { history.replaceState(null, "", "#" + id); } catch(e) {} }
+  };
+})();
+</script>
+</head>
+<body>
+<style>
+.ux{--or:#E2661A;--or2:#F3B48A;--ink:#16171A;--cream:#F6F2EC;--sand:#E8DFD2;--slate:#3D4A5C;--stone:#7A766F;--txt2:#4B4A48;--card:#FFFDF9;--ok:#2F8F5B;--bad:#C2402E;--warn:#D9971E;
+  display:flex;flex-direction:column;gap:28px;font-family:var(--font-anthropic-sans);color:var(--ink);background:var(--cream);border-radius:18px;padding:0 0 28px;overflow:hidden;max-width:1120px;margin:0 auto}
+.ux-hero{background:var(--ink);color:var(--cream);padding:28px 28px 22px;position:relative}
+.ux-hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--or) 0 60%,var(--slate) 60% 85%,var(--sand) 85%)}
+.ux-eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--or);margin:0;font-weight:600}
+.ux-lead{font-family:var(--font-anthropic-serif);font-weight:400;font-size:26px;line-height:1.3;margin:10px 0 12px;max-width:46ch;color:var(--cream)}
+.ux-meta{font-size:12px;color:#CFC7BB;margin:0}
+.ux-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:0 28px}
+.ux-tab{font:inherit;font-size:14px;font-weight:500;background:var(--card);border:1px solid var(--sand);border-radius:999px;padding:7px 16px;color:var(--txt2);cursor:pointer}
+.ux-tab:hover{border-color:var(--or);color:var(--ink)}
+.ux-tab.on{background:var(--or);border-color:var(--or);color:#fff}
+.ux-page{display:flex;flex-direction:column;gap:36px;padding:0 28px}
+.ux-block{display:flex;flex-direction:column;gap:14px}
+.ux-h{display:flex;align-items:center;gap:10px;margin:0;font-size:18px;font-weight:600;color:var(--ink)}
+.ux-h:before{content:"";width:6px;height:20px;border-radius:3px;background:var(--or)}
+.ux-sub{font-size:13px;color:var(--stone);margin:-6px 0 0;max-width:70ch}
+.ux-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.ux-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.ux-grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.ux-card{background:var(--card);border:1px solid var(--sand);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:0 1px 2px rgba(22,23,26,.05)}
+.ux-kpi{border-top:4px solid var(--or)}
+.ux-kpi:nth-child(2){border-top-color:var(--slate)}.ux-kpi:nth-child(3){border-top-color:var(--ink)}.ux-kpi:nth-child(4){border-top-color:var(--sand)}
+.ux-k{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--stone);font-weight:600}
+.ux-big{font-family:var(--font-anthropic-serif);font-weight:400;font-size:38px;font-variant-numeric:tabular-nums;line-height:1;color:var(--ink)}
+.ux-chg{font-size:12px;color:var(--stone)}
+.ux-good{color:var(--ok);font-weight:600}.ux-bad{color:var(--bad);font-weight:600}
+.ux-alerts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.ux-alert{background:var(--card);border:1px solid var(--sand);border-left:6px solid var(--slate);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.ux-alert.Alta{border-left-color:var(--bad)}.ux-alert.Media{border-left-color:var(--warn)}.ux-alert.Info{border-left-color:var(--ok)}
+.ux-t{font-weight:600;font-size:15px;margin:0;color:var(--ink);line-height:1.3}
+.ux-p{font-size:14px;margin:0;line-height:1.45;color:var(--txt2)}
+.ux-small{font-size:13px;color:var(--stone);margin:0;line-height:1.45}
+.ux-do{font-size:13px;margin:0;padding:8px 10px;border-radius:8px;background:#FBEADF;color:#7A3410;line-height:1.4}
+.ux-chip{align-self:flex-start;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;background:var(--sand);color:var(--ink)}
+.ux-chip.or{background:var(--or);color:#fff}.ux-chip.sl{background:var(--slate);color:#fff}.ux-chip.ink{background:var(--ink);color:var(--cream)}.ux-chip.ok{background:#DDF0E4;color:var(--ok)}
+.ux-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--or);color:#fff;font-weight:700;font-size:14px;flex:none}
+.ux-row{display:flex;gap:10px;align-items:flex-start}
+.ux-thumb{position:relative;flex:none;width:92px;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:linear-gradient(160deg,var(--or),var(--slate));display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;text-decoration:none}
+.ux-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ux-thumb.lg{width:100%;max-width:none;aspect-ratio:4/5}
+.ux-link{align-self:flex-start;font-size:13px;font-weight:600;color:var(--or);text-decoration:none;border-bottom:1.5px solid var(--or2)}
+.ux-link:hover{color:var(--ink);border-color:var(--ink)}
+.ux-stats{display:flex;flex-wrap:wrap;gap:6px}
+.ux-stat{font-size:12px;background:var(--cream);border:1px solid var(--sand);border-radius:8px;padding:3px 8px;color:var(--txt2);font-variant-numeric:tabular-nums}
+.ux-stat b{color:var(--ink)}
+.ux-camp{border-left:6px solid var(--ok)}
+.ux-prop{padding:0;overflow:hidden;gap:0}
+.ux-prop .band{height:6px;background:var(--or)}
+.ux-prop.Contenido .band{background:var(--slate)}.ux-prop.Estrategia .band{background:var(--ink)}
+.ux-prop .body{padding:16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.ux-prop .foot{display:flex;align-items:center;gap:8px;padding:10px 18px;border-top:1px solid var(--sand);background:var(--cream)}
+.ux-av{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--slate);color:#fff;font-size:11px;font-weight:700}
+.ux-who{font-size:13px;color:var(--txt2);flex:1}
+.ux-st{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 9px;background:var(--sand);color:var(--ink)}
+.ux-st.En{background:#FDEBD9;color:#B4510F}.ux-st.Pen{background:#F9E3E0;color:var(--bad)}.ux-st.Hec{background:#DDF0E4;color:var(--ok)}
+.ux-chart{position:relative;min-height:200px;background:var(--card);border:1px solid var(--sand);border-radius:14px;padding:16px}
+.ux-empty{margin:0;padding:22px;border:1.5px dashed var(--or2);border-radius:14px;color:var(--txt2);font-size:13px;text-align:center;background:#FFF8F2}
+.ux-more>summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--slate);padding:4px 0}
+.ux-more[open]>summary{margin-bottom:10px}
+.ux-scroll{overflow-x:auto;background:var(--card);border:1px solid var(--sand);border-radius:12px}
+.ux-tbl{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.ux-tbl th{text-align:left;font-weight:600;color:var(--cream);background:var(--slate);padding:9px 10px;white-space:nowrap}
+.ux-tbl td{border-bottom:1px solid var(--sand);padding:9px 10px;vertical-align:top}
+.ux-tbl td.n,.ux-tbl th.n{text-align:right;white-space:nowrap}
+.ux-tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--cream);border-radius:8px;padding:6px 10px;font-size:12px;white-space:nowrap;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.ux-chart .tick text{fill:var(--stone);font-size:12px}
+.ux-chart .domain,.ux-chart .tick line{stroke:var(--sand)}
+.ux-foot{padding:0 28px;font-size:13px;color:var(--stone)}
+.ux-foot ul{max-width:75ch;line-height:1.55}
+.ux-next{display:flex;flex-direction:column;gap:16px}
+.ux-nx{background:var(--card);border:1px solid var(--sand);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:150px minmax(0,1fr);box-shadow:0 1px 2px rgba(22,23,26,.05)}
+.ux-nx.main{border:2px solid var(--or)}
+.ux-nx .side{background:var(--ink);padding:16px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.ux-nx .side .ux-thumb{width:100%}
+.ux-nx .todo{aspect-ratio:9/16;border-radius:10px;border:2px dashed var(--or2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--or2);font-size:13px;font-weight:600;text-align:center;padding:8px}
+.ux-nx .todo b{font-size:28px;color:var(--or)}
+.ux-nx .when{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--or)}
+.ux-nx .main-body{padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ux-nx .name{font-family:var(--font-anthropic-serif);font-size:24px;line-height:1.2;margin:0;color:var(--ink)}
+.ux-why{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:w}
+.ux-why li{counter-increment:w;display:flex;gap:10px;font-size:14px;line-height:1.4;color:var(--txt2)}
+.ux-why li:before{content:counter(w);flex:none;width:22px;height:22px;border-radius:50%;background:#FBEADF;color:#7A3410;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.ux-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.ux-fact{background:var(--cream);border:1px solid var(--sand);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--ink);line-height:1.35}
+.ux-fact span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--stone)}
+.ux-chip.warn{background:#FCEFD6;color:#8A5A0B}
+.ux-pulse{display:flex;flex-direction:column;gap:8px}
+.ux-bar{height:8px;border-radius:4px;background:var(--sand);overflow:hidden}.ux-bar i{display:block;height:100%;background:var(--or);border-radius:4px}
+.ux-pill{align-self:flex-start;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
+.ux-pill.Alta{background:#F9E3E0;color:var(--bad)}.ux-pill.Media{background:#FCEFD6;color:#8A5A0B}.ux-pill.Baja{background:#DDF0E4;color:var(--ok)}
+.ux-mx{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.ux-mx th{font-weight:600;color:var(--stone);font-size:12px;padding:10px 6px;text-align:center}
+.ux-mx th:first-child{text-align:left;width:34%}.ux-mx th.us{color:var(--or)}
+.ux-mx td{border-top:1px solid var(--sand);padding:10px 6px;text-align:center;color:var(--ink)}
+.ux-mx td:first-child{text-align:left;font-weight:600}
+.ux-mx td.us{background:#FFF4EC}
+.ux-dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
+.ux-dot.si{background:var(--slate)}.ux-dot.si.us{background:var(--or)}.ux-dot.no{border:2px solid #CFC7BB}.ux-dot.nv{border:2px dashed #CFC7BB}
+.ux-q{color:#B4ADA2;font-size:12px}
+.ux-gap{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;vertical-align:middle}
+.ux-gap.fav{background:#DDF0E4;color:var(--ok)}.ux-gap.contra{background:#F9E3E0;color:var(--bad)}
+.ux-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--stone);padding:10px 12px;border-top:1px solid var(--sand)}
+.ux-fields{display:grid;grid-template-columns:86px minmax(0,1fr);gap:8px 12px;font-size:13px;line-height:1.4;margin:0}
+.ux-fields dt{color:var(--stone);font-weight:600;font-size:12px;padding-top:1px}.ux-fields dd{margin:0;color:var(--ink)}
+.ux-tags{display:flex;flex-wrap:wrap;gap:6px}.ux-tag{font-size:12px;background:var(--cream);border:1px solid var(--sand);border-radius:8px;padding:2px 8px}
+.ux-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.ux-3 div{border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.4;display:flex;flex-direction:column;gap:4px}
+.ux-3 b{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.ux-3 .tomar{background:#DDF0E4;color:#1F5E3C}.ux-3 .evitar{background:#F9E3E0;color:#8E2A1D}.ux-3 .opor{background:#FCEFD6;color:#7A4E08}
+.ux-ads{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.ux-ad{display:flex;flex-direction:column;gap:5px;text-decoration:none;color:inherit;min-width:0}
+.ux-ad .ux-thumb{width:100%;background:var(--ink)}
+.ux-ad:hover .ux-thumb{outline:3px solid var(--or)}
+.ux-ad em{font-style:normal;font-size:11px;font-weight:700;color:var(--or)}
+.ux-ad span{font-size:12px;line-height:1.3;color:var(--txt2)}
+@media (max-width:640px){.ux-nx{grid-template-columns:1fr}.ux-nx .side{flex-direction:row;align-items:center}.ux-nx .side .ux-thumb,.ux-nx .todo{width:90px;flex:none}}
+</style>
+
+<div class="ux" data-read lang="es">
+<header class="ux-hero" id="inicio">
+  <p class="ux-eyebrow">Urbantex · Ads y contenido</p>
+  <p class="ux-lead" data-draw="resumen" data-source="resumen" data-field="texto">—</p>
+  <p class="ux-meta">Actualizado el <span data-draw="resumen-fecha" data-source="resumen" data-field="fecha">—</span> · Se actualiza cada mañana · Reporte semanal los lunes</p>
+</header>
+
+<nav class="ux-tabs" role="tablist" aria-label="Secciones">
+  <button class="ux-tab on" role="tab" aria-selected="true" data-tab="resumen">Resumen</button>
+  <button class="ux-tab" role="tab" aria-selected="false" data-tab="ads">Ads</button>
+  <button class="ux-tab" role="tab" aria-selected="false" data-tab="contenido">Contenido</button>
+  <button class="ux-tab" role="tab" aria-selected="false" data-tab="competencia">Competencia</button>
+  <button class="ux-tab" role="tab" aria-selected="false" data-tab="embudo">Embudo</button>
+</nav>
+
+<section class="ux-page" id="resumen" data-page="resumen">
+  <div class="ux-block" id="campanas-hoy">
+    <h2 class="ux-h">Campañas activas</h2>
+    <p class="ux-empty" data-empty="campanas" hidden>No hay campañas corriendo ahora.</p>
+    <div class="ux-grid2" data-draw="campanas" data-source="campanas"></div>
+  </div>
+
+  <div class="ux-block" id="kpis">
+    <h2 class="ux-h">Ads · últimos 7 días</h2>
+    <div class="ux-grid">
+      <div class="ux-card ux-kpi" id="kpi-gasto"><span class="ux-k">Gasto</span><span class="ux-big" data-draw="kpi" data-k="gasto" data-source="ads_7d" data-field="gasto" data-row="0">—</span><span class="ux-chg" data-draw="kpi-chg" data-k="gasto"></span></div>
+      <div class="ux-card ux-kpi" id="kpi-conv"><span class="ux-k">Conversaciones</span><span class="ux-big" data-draw="kpi" data-k="conversaciones" data-source="ads_7d" data-field="conversaciones" data-row="0">—</span><span class="ux-chg" data-draw="kpi-chg" data-k="conversaciones"></span></div>
+      <div class="ux-card ux-kpi" id="kpi-cpc"><span class="ux-k">Costo por conversación</span><span class="ux-big" data-draw="kpi" data-k="costo_conv" data-source="ads_7d" data-field="costo_conv" data-row="0">—</span><span class="ux-chg" data-draw="kpi-chg" data-k="costo_conv"></span></div>
+      <div class="ux-card ux-kpi" id="kpi-freq"><span class="ux-k">Frecuencia</span><span class="ux-big" data-draw="kpi" data-k="frecuencia" data-source="ads_7d" data-field="frecuencia" data-row="0">—</span><span class="ux-chg">Hay fatiga a partir de 2,5</span></div>
+    </div>
+  </div>
+
+  <div class="ux-block" id="atencion">
+    <h2 class="ux-h">Atención</h2>
+    <p class="ux-empty" data-empty="alertas" hidden>Todo en orden: no hay alertas.</p>
+    <ul class="ux-alerts" data-draw="alertas-top" data-source="alertas"></ul>
+  </div>
+
+  <div class="ux-block" id="proxima">
+    <h2 class="ux-h">Próxima campaña sugerida</h2>
+    <p class="ux-sub">Sale de cruzar los reels, los ads, el embudo y la competencia. Se revisa cada lunes. Nada se prende sin la aprobación de Isabel.</p>
+    <div class="ux-next" data-draw="proxima" data-source="proxima_campana reels"></div>
+  </div>
+
+  <div class="ux-block" id="destacado">
+    <h2 class="ux-h">Lo que mejor funciona</h2>
+    <div class="ux-grid2">
+      <div class="ux-card" id="top-reel"><span class="ux-chip or">Reel n.º 1</span><div data-draw="top" data-tipo="Reel" data-source="ranking reels"></div></div>
+      <div class="ux-card" id="top-ad"><span class="ux-chip sl">Anuncio n.º 1</span><div data-draw="top" data-tipo="Anuncio" data-source="ranking reels"></div></div>
+    </div>
+  </div>
+
+  <div class="ux-block" id="semana">
+    <h2 class="ux-h">Propuestas de la semana</h2>
+    <p class="ux-sub">Nada se publica ni se cambia en Meta sin la aprobación de Isabel.</p>
+    <div class="ux-grid2" data-draw="propuestas" data-source="propuestas"></div>
+    <details class="ux-more"><summary>Ver todas las propuestas</summary>
+      <div class="ux-scroll"><table class="ux-tbl" data-source="propuestas" data-row-key="semana,propuesta">
+        <thead><tr><th data-field="semana">Semana</th><th data-field="tipo">Tipo</th><th data-field="propuesta">Propuesta</th><th data-field="responsable">Responsable</th><th data-field="estado">Estado</th></tr></thead>
+        <tbody data-draw="propuestas-tbl"></tbody>
+      </table></div>
+    </details>
+  </div>
+</section>
+
+<section class="ux-page" id="ads" data-page="ads" hidden>
+  <div class="ux-block" id="ads-camp">
+    <h2 class="ux-h">Campañas activas</h2>
+    <div class="ux-grid2" data-draw="campanas" data-source="campanas"></div>
+  </div>
+  <div class="ux-block" id="ads-dia">
+    <h2 class="ux-h">Día a día</h2>
+    <p class="ux-sub">Barras naranjas: conversaciones. Línea azul: costo por conversación.</p>
+    <div class="ux-chart" id="ads-diario-chart" data-draw="ads-diario" data-source="ads_diario"></div>
+  </div>
+  <div class="ux-block" id="ads-rank">
+    <h2 class="ux-h">Ranking de anuncios</h2>
+    <div class="ux-grid2" data-draw="ranking" data-tipo="Anuncio" data-source="ranking reels"></div>
+  </div>
+  <div class="ux-block" id="ads-sem">
+    <h2 class="ux-h">Costo por conversación por semana</h2>
+    <p class="ux-sub">En rojo, las semanas por encima de $1,00.</p>
+    <div class="ux-chart" id="ads-semanal-chart" data-draw="ads-semanal" data-source="ads_semanal"></div>
+    <details class="ux-more"><summary>Ver tabla por semana y campaña</summary>
+      <div class="ux-scroll"><table class="ux-tbl" data-source="ads_semanal" data-row-key="clave">
+        <thead><tr><th data-field="periodo">Semana</th><th data-field="campana">Campaña</th><th class="n" data-field="gasto">Gasto</th><th class="n" data-field="conversaciones">Conversaciones</th><th class="n" data-field="costo_conv">Costo/conv.</th></tr></thead>
+        <tbody data-draw="ads-semanal-tbl"></tbody>
+      </table></div>
+    </details>
+    <details class="ux-more"><summary>Ver resultados por anuncio</summary>
+      <div class="ux-scroll"><table class="ux-tbl" data-source="ads_anuncios" data-row-key="anuncio">
+        <thead><tr><th data-field="anuncio">Anuncio</th><th data-field="periodo">Periodo</th><th class="n" data-field="conversaciones">Conv.</th><th class="n" data-field="costo_conv">Costo/conv.</th><th data-field="estado">Estado</th></tr></thead>
+        <tbody data-draw="ads-anuncios-tbl"></tbody>
+      </table></div>
+    </details>
+  </div>
+</section>
+
+<section class="ux-page" id="contenido" data-page="contenido" hidden>
+  <div class="ux-block" id="reels-rank">
+    <h2 class="ux-h">Los reels que mejor funcionan</h2>
+    <p class="ux-sub">Pesan más los guardados, los compartidos y los seguidores que las vistas.</p>
+    <div class="ux-grid2" data-draw="ranking" data-tipo="Reel" data-source="ranking reels"></div>
+  </div>
+  <div class="ux-block" id="reels-galeria">
+    <h2 class="ux-h">Todos los reels del mes</h2>
+    <p class="ux-sub">Instagram, últimos 30 días, de más a menos vistas.</p>
+    <div class="ux-grid3" data-draw="galeria" data-source="reels"></div>
+    <details class="ux-more"><summary>Ver tabla completa</summary>
+      <div class="ux-scroll"><table class="ux-tbl" data-source="reels" data-row-key="fecha,reel">
+        <thead><tr><th data-field="fecha">Fecha</th><th data-field="reel">Reel</th><th class="n" data-field="vistas">Vistas</th><th class="n" data-field="alcance">Alcance</th><th class="n" data-field="guardados">Guardados</th><th class="n" data-field="compartidos">Compartidos</th><th class="n" data-field="seguidores">Seguidores</th></tr></thead>
+        <tbody data-draw="reels-tbl"></tbody>
+      </table></div>
+    </details>
+  </div>
+  <div class="ux-block" id="comentarios">
+    <h2 class="ux-h">Lo que más pregunta la gente</h2>
+    <p class="ux-empty" data-empty="comentarios" hidden>Se llena el lunes con los comentarios de Instagram agrupados por tema.</p>
+    <div class="ux-grid2" data-draw="comentarios" data-source="comentarios"></div>
+  </div>
+</section>
+
+<section class="ux-page" id="competencia" data-page="competencia" hidden>
+  <div class="ux-block" id="comp-pulso">
+    <h2 class="ux-h">Pulso de la semana</h2>
+    <p class="ux-sub">Anuncios activos en la Biblioteca de Anuncios de Meta. Se actualiza cada lunes.</p>
+    <p class="ux-empty" data-empty="competidores" hidden>Todavía no hay análisis de competidores.</p>
+    <div class="ux-grid" data-draw="comp-pulso" data-source="competidores"></div>
+  </div>
+  <div class="ux-block" id="comp-temas">
+    <h2 class="ux-h">Quién habla de qué</h2>
+    <p class="ux-sub">Los temas que tocan en sus anuncios frente a los nuestros. Así se ven los huecos.</p>
+    <div class="ux-scroll" data-draw="comp-temas" data-source="competencia_temas"></div>
+  </div>
+  <div class="ux-block" id="comp-fichas">
+    <h2 class="ux-h">Ficha por competidor</h2>
+    <div class="ux-grid2" data-draw="competidores" data-source="competidores competencia_anuncios"></div>
+  </div>
+  <div class="ux-block" id="comp-next">
+    <h2 class="ux-h">Qué hacemos con esto</h2>
+    <p class="ux-sub">La campaña que se sugiere a partir de este análisis. El detalle completo está en Resumen.</p>
+    <div class="ux-next" data-draw="proxima" data-compact="1" data-source="proxima_campana reels"></div>
+  </div>
+</section>
+
+<section class="ux-page" id="embudo" data-page="embudo" hidden>
+  <div class="ux-block" id="embudo-total">
+    <h2 class="ux-h">Del chat al cliente</h2>
+    <p class="ux-sub">Suma de las semanas registradas por Isabel cada lunes.</p>
+    <div class="ux-chart" id="embudo-chart" data-draw="embudo-chart" data-source="embudo_total"></div>
+  </div>
+  <div class="ux-block" id="embudo-sem">
+    <h2 class="ux-h">Por semana y campaña</h2>
+    <div class="ux-scroll"><table class="ux-tbl" data-source="embudo" data-row-key="clave">
+      <thead><tr><th data-field="periodo">Semana</th><th data-field="campana">Campaña</th><th class="n" data-field="conversaciones">Chats</th><th class="n" data-field="llamadas_realizadas">Llamadas</th><th class="n" data-field="cotizaciones">Cotiz.</th><th class="n" data-field="clientes">Clientes</th><th class="n" data-source="embudo_costos" data-field="costo_llamada">$/llamada</th><th class="n" data-source="embudo_costos" data-field="costo_cliente">$/cliente</th></tr></thead>
+      <tbody data-draw="embudo"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<details class="ux-more ux-foot" id="detalles">
+  <summary>Alertas anteriores, definiciones y umbrales</summary>
+  <div class="ux-scroll"><table class="ux-tbl" data-source="alertas" data-row-key="fecha,tipo">
+    <thead><tr><th data-field="fecha">Fecha</th><th data-field="nivel">Nivel</th><th data-field="tipo">Tipo</th><th data-field="mensaje">Qué pasa</th></tr></thead>
+    <tbody data-draw="alertas-tbl"></tbody>
+  </table></div>
+  <ul>
+    <li>Conversación: chat de WhatsApp iniciado desde un anuncio (dato de Meta).</li>
+    <li>Costo disparado: más de $1,00 por conversación en un día, o más del doble del promedio de 7 días.</li>
+    <li>Fatiga: frecuencia mayor a 2,5, o caída del CTR de más de 30 % frente a la semana anterior.</li>
+    <li>Reel que despega: más de 2.278 vistas en Instagram, o más del doble de la mediana de los últimos 10 reels.</li>
+    <li>Fuentes: Meta (ads), Metricool (reels de Instagram), Business Suite (comentarios y seguidores por reel), hoja «Embudo semanal» (embudo).</li>
+  </ul>
+</details>
+</div>
+
+<script>
+window.U = (function(){
+  const loc = d3.formatLocale({decimal:",",thousands:".",grouping:[3],currency:["$",""]});
+  const money = loc.format("$,.2f"), int = loc.format(",d"), dec = loc.format(",.2f"), pct = loc.format(".0%");
+  const pDate = d3.utcParse("%Y-%m-%d");
+  const meses = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  function fecha(s){ const d = pDate(String(s||"")); return d ? d.getUTCDate()+" "+meses[d.getUTCMonth()] : (s==null?"—":String(s)); }
+  function num(v){ return v==null||v===""||isNaN(+v) ? null : +v; }
+  function fmt(v,kind){ const n=num(v); if(n==null) return "—"; return kind==="money"?money(n):kind==="int"?int(n):kind==="pct"?pct(n):dec(n); }
+  function el(tag, cls, txt, mark){ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt;
+    if(mark){ e.setAttribute("data-source",mark[0]); e.setAttribute("data-field",mark[1]); e.setAttribute("data-row",String(mark[2])); } return e; }
+  function safeLink(u){ return typeof u === "string" && /^https:\/\/(www\.)?(instagram\.com\/|facebook\.com\/ads\/library\/)/.test(u) ? u : null; }
+  function link(u, txt){ const h = safeLink(u); if(!h) return null; const a = el("a","ux-link",txt); a.href = h; a.target = "_blank"; a.rel = "noopener noreferrer"; return a; }
+  function thumb(r, big){
+    const h = safeLink(r && r.link);
+    const box = el(h ? "a" : "div", "ux-thumb" + (big ? " lg" : ""));
+    if (h) { box.href = h; box.target = "_blank"; box.rel = "noopener noreferrer"; box.setAttribute("aria-label","Ver el reel en Instagram"); }
+    const m = r && r.miniatura;
+    if (typeof m === "string" && m.startsWith("data:image/")) { const img = document.createElement("img"); img.src = m; img.alt = ""; box.appendChild(img); }
+    else box.textContent = "▶";
+    return box;
+  }
+  function stat(label, v, kind){ const s = el("span","ux-stat"); s.append(el("b",null,fmt(v,kind||"int")), document.createTextNode(" " + label)); return s; }
+  function table(tbody, src, cols, opts){
+    const s = dash.data(src); opts = opts||{};
+    tbody.replaceChildren();
+    if (s.status!=="ok") return;
+    let rows = s.data.slice(); if (opts.sort) rows.sort(opts.sort); if (opts.limit) rows = rows.slice(0,opts.limit);
+    rows.forEach(r=>{
+      const tr = document.createElement("tr");
+      if (opts.key) tr.setAttribute("data-key", opts.key.map(k=>encodeURIComponent(String(r[k]))).join(","));
+      cols.forEach(c=>{
+        const v = c.get ? c.get(r) : r[c.f];
+        tr.appendChild(el("td", c.kind && c.kind!=="date" ? "n" : "", c.kind==="date" ? fecha(v) : c.kind ? fmt(v,c.kind) : (v==null||v===""?"—":String(v))));
+      });
+      tbody.appendChild(tr);
+    });
+  }
+  function tip(box){ let t = box.querySelector(".ux-tip"); if(!t){ t=document.createElement("div"); t.className="ux-tip"; t.hidden=true; box.appendChild(t);} return t; }
+  function latest(rows, f){ return rows.map(r=>String(r[f])).sort().pop(); }
+  return {money,int,dec,pct,fecha,num,fmt,el,link,thumb,stat,table,tip,latest,safeLink};
+})();
+window.UB = {or:"#E2661A", slate:"#3D4A5C", bad:"#C2402E", sand:"#E8DFD2"};
+
+(function(){
+  const pick = (id) => {
+    const pages = document.querySelectorAll("[data-page]");
+    let found = false; pages.forEach(p => { if (p.getAttribute("data-page") === id) found = true; });
+    if (!found) id = "resumen";
+    pages.forEach(p => { p.hidden = p.getAttribute("data-page") !== id; });
+    document.querySelectorAll("[data-tab]").forEach(b => { const on = b.getAttribute("data-tab") === id; b.className = "ux-tab" + (on ? " on" : ""); b.setAttribute("aria-selected", on ? "true" : "false"); });
+    return id;
+  };
+  document.querySelectorAll("[data-tab]").forEach(b => b.addEventListener("click", () => { const id = pick(b.getAttribute("data-tab")); dash.setLink(id); }));
+  const h = (location.hash || "").replace("#", "");
+  if (h) pick(h);
+})();
+
+dash.calc("ads_7d", {
+  title: "Ads · últimos 7 días",
+  description: "Suma de gasto y conversaciones de los últimos 7 días con datos y de los 7 anteriores; frecuencia = la más alta del último día.",
+  inputs: ["ads_diario"],
+  fn: (diario) => {
+    const rows = diario.filter(r => r.fecha);
+    if (!rows.length) return [];
+    const toT = s => Date.parse(s + "T00:00:00Z");
+    const last = Math.max(...rows.map(r => toT(r.fecha)));
+    const day = 86400000;
+    const sum = (a, k) => a.reduce((s, r) => s + (+r[k] || 0), 0);
+    const cur = rows.filter(r => toT(r.fecha) > last - 7 * day);
+    const prev = rows.filter(r => toT(r.fecha) <= last - 7 * day && toT(r.fecha) > last - 14 * day);
+    const g = sum(cur, "gasto"), c = sum(cur, "conversaciones"), gp = sum(prev, "gasto"), cp = sum(prev, "conversaciones");
+    const lastRows = rows.filter(r => toT(r.fecha) === last);
+    const fr = Math.max(...lastRows.map(r => +r.frecuencia_acumulada || 0));
+    return [{
+      gasto: Math.round(g * 100) / 100, conversaciones: c, costo_conv: c ? Math.round(g / c * 100) / 100 : null, frecuencia: fr || null,
+      gasto_prev: prev.length ? Math.round(gp * 100) / 100 : null, conversaciones_prev: prev.length ? cp : null,
+      costo_conv_prev: cp ? Math.round(gp / cp * 100) / 100 : null
+    }];
+  }
+});
+
+dash.calc("embudo_costos", {
+  title: "Embudo · costo por llamada y por cliente",
+  description: "Gasto de la misma semana y campaña dividido entre llamadas hechas y entre clientes.",
+  inputs: ["embudo", "ads_semanal"],
+  fn: (embudo, semanal) => embudo.map(e => {
+    const s = semanal.find(x => x.clave === e.clave);
+    const g = s ? +s.gasto : null;
+    const ll = +e.llamadas_realizadas || 0, cl = +e.clientes || 0;
+    return { clave: e.clave, costo_llamada: g != null && ll ? Math.round(g / ll * 100) / 100 : null, costo_cliente: g != null && cl ? Math.round(g / cl * 100) / 100 : null };
+  })
+});
+
+dash.calc("embudo_total", {
+  title: "Embudo · total de semanas registradas",
+  description: "Suma por etapa de todas las filas del embudo; los vacíos cuentan como 0.",
+  inputs: ["embudo"],
+  fn: (embudo) => {
+    const s = k => embudo.reduce((a, r) => a + (+r[k] || 0), 0);
+    return [
+      {etapa: "Conversaciones", valor: s("conversaciones")},
+      {etapa: "Llamadas ofrecidas", valor: s("llamadas_ofrecidas")},
+      {etapa: "Llamadas hechas", valor: s("llamadas_realizadas")},
+      {etapa: "Cotizaciones", valor: s("cotizaciones")},
+      {etapa: "Clientes", valor: s("clientes")}
+    ];
+  }
+});
+
+dash.onData(() => {
+  document.querySelectorAll("[data-empty]").forEach(p => {
+    const s = dash.data(p.getAttribute("data-empty"));
+    p.hidden = !(s.status === "ok" && s.data.length === 0);
+  });
+});
+
+dash.draw("resumen", el => {
+  const s = dash.data("resumen");
+  if (s.status !== "ok" || !s.data.length) { el.textContent = "—"; return; }
+  const rows = s.data.slice().sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
+  el.textContent = rows[0].texto; el.setAttribute("data-row", String(s.data.indexOf(rows[0])));
+});
+dash.draw("resumen-fecha", el => {
+  const s = dash.data("resumen");
+  if (s.status !== "ok" || !s.data.length) { el.textContent = "—"; return; }
+  const rows = s.data.slice().sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
+  el.textContent = U.fecha(rows[0].fecha); el.setAttribute("data-row", String(s.data.indexOf(rows[0])));
+});
+
+dash.draw("campanas", el => {
+  const s = dash.data("campanas"); el.replaceChildren();
+  if (s.status !== "ok") return;
+  s.data.forEach((r, i) => {
+    const c = U.el("div", "ux-card ux-camp");
+    const head = U.el("div", "ux-row");
+    head.append(U.thumb(r, false));
+    const info = U.el("div"); info.style.display = "flex"; info.style.flexDirection = "column"; info.style.gap = "8px"; info.style.minWidth = "0";
+    const chips = U.el("div", "ux-stats");
+    chips.append(U.el("span", "ux-chip ok", "● " + (r.estado || "Activa"), ["campanas", "estado", i]), U.el("span", "ux-chip", "Desde el " + U.fecha(r.desde)));
+    info.append(chips, U.el("p", "ux-t", r.campana, ["campanas", "campana", i]), U.el("p", "ux-small", (r.anuncio || "") + " · " + (r.publico || ""), ["campanas", "anuncio", i]));
+    const st = U.el("div", "ux-stats");
+    st.append(U.stat("por día", r.presupuesto_dia, "money"), U.stat("gastados hoy", r.gasto_hoy, "money"), U.stat("chats hoy", r.conversaciones_hoy), U.stat("impresiones hoy", r.impresiones_hoy));
+    info.append(st);
+    const a = U.link(r.link, "Ver el reel del anuncio ↗"); if (a) info.append(a);
+    head.append(info); c.append(head); el.appendChild(c);
+  });
+});
+
+dash.draw("kpi", el => {
+  const k = el.getAttribute("data-k"), s = dash.data("ads_7d");
+  const r = s.status === "ok" && s.data && s.data[0];
+  el.textContent = r ? U.fmt(r[k], k === "gasto" || k === "costo_conv" ? "money" : k === "conversaciones" ? "int" : "dec") : "—";
+});
+dash.draw("kpi-chg", el => {
+  const k = el.getAttribute("data-k"), s = dash.data("ads_7d");
+  const r = s.status === "ok" && s.data && s.data[0];
+  el.replaceChildren();
+  if (!r) { el.textContent = "Desde mañana, con datos diarios"; return; }
+  if (!r[k + "_prev"] || r[k] == null) { el.textContent = "Sin semana previa para comparar"; return; }
+  const ch = (r[k] - r[k + "_prev"]) / r[k + "_prev"];
+  const good = k === "gasto" ? null : (k === "conversaciones" ? ch >= 0 : ch <= 0);
+  el.append(U.el("span", good == null ? "" : (good ? "ux-good" : "ux-bad"), (ch >= 0 ? "▲ +" : "▼ ") + U.pct(ch)), document.createTextNode(" frente a los 7 días previos"));
+});
+
+const LV = ["Alta", "Media", "Info"];
+dash.draw("alertas-top", ul => {
+  const s = dash.data("alertas"); ul.replaceChildren();
+  if (s.status !== "ok") return;
+  s.data.slice().sort((a, b) => LV.indexOf(a.nivel) - LV.indexOf(b.nivel) || String(b.fecha).localeCompare(String(a.fecha))).slice(0, 3).forEach(r => {
+    const i = s.data.indexOf(r);
+    const li = U.el("li", "ux-alert " + (LV.includes(r.nivel) ? r.nivel : "Info"));
+    li.append(U.el("p", "ux-t", r.tipo, ["alertas", "tipo", i]), U.el("p", "ux-small", r.mensaje, ["alertas", "mensaje", i]));
+    if (r.accion && r.accion !== "Ninguna.") li.append(U.el("p", "ux-do", "→ " + r.accion, ["alertas", "accion", i]));
+    ul.appendChild(li);
+  });
+});
+dash.draw("alertas-tbl", tb => U.table(tb, "alertas", [{f:"fecha",kind:"date"},{f:"nivel"},{f:"tipo"},{f:"mensaje"}],
+  {key:["fecha","tipo"], sort:(a,b)=>String(b.fecha).localeCompare(String(a.fecha))}));
+
+function reelFor(r){
+  const rs = dash.data("reels");
+  if (rs.status !== "ok" || !r.link) return r;
+  const m = rs.data.find(x => x.link === r.link);
+  return m ? Object.assign({}, r, {miniatura: m.miniatura}) : r;
+}
+function rankCard(r, i, big){
+  const c = U.el("div", big ? "" : "ux-card");
+  c.style.display = "flex"; c.style.flexDirection = "column"; c.style.gap = "10px";
+  const row = U.el("div", "ux-row");
+  if (r.link) row.append(U.thumb(reelFor(r), false));
+  const info = U.el("div"); info.style.display = "flex"; info.style.flexDirection = "column"; info.style.gap = "8px"; info.style.minWidth = "0";
+  const head = U.el("div", "ux-row"); head.style.alignItems = "center";
+  if (!big) head.append(U.el("span", "ux-num", String(r.posicion)));
+  head.append(U.el("p", "ux-t", r.contenido, ["ranking", "contenido", i]));
+  info.append(head, U.el("p", "ux-small", r.metrica, ["ranking", "metrica", i]));
+  const a = U.link(r.link, "Ver en Instagram ↗"); if (a) info.append(a);
+  row.append(info);
+  c.append(row, U.el("p", "ux-p", r.por_que, ["ranking", "por_que", i]), U.el("p", "ux-do", "→ " + r.que_hacer, ["ranking", "que_hacer", i]));
+  return c;
+}
+dash.draw("top", el => {
+  const tipo = el.getAttribute("data-tipo"), s = dash.data("ranking"); el.replaceChildren();
+  if (s.status !== "ok" || !s.data.length) { el.textContent = "—"; return; }
+  const rows = s.data.filter(r => r.tipo === tipo); if (!rows.length) { el.textContent = "—"; return; }
+  const f = U.latest(rows, "fecha");
+  const r = rows.filter(x => String(x.fecha) === f).sort((a, b) => a.posicion - b.posicion)[0];
+  el.appendChild(rankCard(r, s.data.indexOf(r), true));
+});
+dash.draw("ranking", el => {
+  const tipo = el.getAttribute("data-tipo"), s = dash.data("ranking"); el.replaceChildren();
+  if (s.status !== "ok") return;
+  const rows = s.data.filter(r => r.tipo === tipo); if (!rows.length) return;
+  const f = U.latest(rows, "fecha");
+  rows.filter(r => String(r.fecha) === f).sort((a, b) => a.posicion - b.posicion).forEach(r => el.appendChild(rankCard(r, s.data.indexOf(r), false)));
+});
+
+dash.draw("galeria", el => {
+  const s = dash.data("reels"); el.replaceChildren();
+  if (s.status !== "ok") return;
+  s.data.slice().filter(r => r.vistas != null).sort((a, b) => b.vistas - a.vistas).forEach(r => {
+    const i = s.data.indexOf(r), c = U.el("div", "ux-card");
+    c.style.padding = "12px";
+    c.append(U.thumb(r, true), U.el("p", "ux-t", r.reel, ["reels", "reel", i]), U.el("p", "ux-small", U.fecha(r.fecha)));
+    const st = U.el("div", "ux-stats");
+    st.append(U.stat("vistas", r.vistas), U.stat("guardados", r.guardados), U.stat("compartidos", r.compartidos));
+    if (r.seguidores != null) st.append(U.stat("seguidores", r.seguidores));
+    c.append(st);
+    const a = U.link(r.link, "Ver en Instagram ↗"); if (a) c.append(a);
+    el.appendChild(c);
+  });
+});
+
+const INI = n => String(n || "?").split(/[\s\/]+/).filter(Boolean).map(w => w[0]).join("").slice(0, 2).toUpperCase();
+dash.draw("propuestas", el => {
+  const s = dash.data("propuestas"); el.replaceChildren();
+  if (s.status !== "ok" || !s.data.length) return;
+  const f = U.latest(s.data, "semana");
+  s.data.filter(r => String(r.semana) === f).forEach(r => {
+    const i = s.data.indexOf(r), c = U.el("div", "ux-card ux-prop " + (["Ads","Contenido","Estrategia"].includes(r.tipo) ? r.tipo : "Ads"));
+    const body = U.el("div", "body");
+    body.append(U.el("span", "ux-chip " + (r.tipo === "Contenido" ? "sl" : r.tipo === "Estrategia" ? "ink" : "or"), r.tipo, ["propuestas", "tipo", i]),
+      U.el("p", "ux-t", r.propuesta, ["propuestas", "propuesta", i]), U.el("p", "ux-small", r.por_que, ["propuestas", "por_que", i]));
+    const foot = U.el("div", "foot");
+    const est = String(r.estado || "");
+    foot.append(U.el("span", "ux-av", INI(r.responsable)), U.el("span", "ux-who", r.responsable, ["propuestas", "responsable", i]),
+      U.el("span", "ux-st " + est.slice(0, 3), est, ["propuestas", "estado", i]));
+    c.append(U.el("div", "band"), body, foot); el.appendChild(c);
+  });
+});
+dash.draw("propuestas-tbl", tb => U.table(tb, "propuestas", [{f:"semana",kind:"date"},{f:"tipo"},{f:"propuesta"},{f:"responsable"},{f:"estado"}],
+  {key:["semana","propuesta"], sort:(a,b)=>String(b.semana).localeCompare(String(a.semana))}));
+
+dash.draw("comentarios", el => {
+  const s = dash.data("comentarios"); el.replaceChildren();
+  if (s.status !== "ok") return;
+  s.data.slice().sort((a, b) => (b.frecuencia || 0) - (a.frecuencia || 0)).forEach(r => {
+    const i = s.data.indexOf(r), c = U.el("div", "ux-card");
+    c.append(U.el("span", "ux-chip or", U.fmt(r.frecuencia, "int") + " comentarios"), U.el("p", "ux-t", r.tema, ["comentarios", "tema", i]),
+      U.el("p", "ux-small", r.ejemplos, ["comentarios", "ejemplos", i]), U.el("p", "ux-do", "Idea: " + r.idea_contenido, ["comentarios", "idea_contenido", i]));
+    el.appendChild(c);
+  });
+});
+
+function fieldRows(dl, pairs){ pairs.forEach(([k, v, mk]) => { if (v == null || v === "") return; dl.append(U.el("dt", null, k)); const dd = U.el("dd"); if (v instanceof Node) dd.append(v); else { dd.textContent = v; if (mk) { dd.setAttribute("data-source", mk[0]); dd.setAttribute("data-field", mk[1]); dd.setAttribute("data-row", String(mk[2])); } } dl.append(dd); }); }
+function compRows(){ const s = dash.data("competidores"); if (s.status !== "ok" || !s.data.length) return null; const f = U.latest(s.data, "semana"); return {s, rows: s.data.filter(r => String(r.semana) === f)}; }
+dash.draw("comp-pulso", el => {
+  el.replaceChildren(); const c0 = compRows(); if (!c0) return;
+  const max = Math.max(1, ...c0.rows.map(r => +r.anuncios_activos || 0));
+  c0.rows.forEach(r => {
+    const i = c0.s.data.indexOf(r), c = U.el("div", "ux-card ux-pulse");
+    c.append(U.el("span", "ux-k", r.competidor, ["competidores", "competidor", i]));
+    const big = U.el("div"); big.append(U.el("span", "ux-big", U.fmt(r.anuncios_activos, "int"), ["competidores", "anuncios_activos", i]), U.el("span", "ux-small", "  anuncios activos"));
+    c.append(big);
+    const bar = U.el("div", "ux-bar"), fill = document.createElement("i"); fill.style.width = Math.round((+r.anuncios_activos || 0) / max * 100) + "%"; bar.append(fill); c.append(bar);
+    const p = U.num(r.anuncios_prev), n = U.num(r.anuncios_activos);
+    let d = "Primera semana medida";
+    if (p != null && n != null) d = n === p ? "Igual que la semana pasada" : (n > p ? "+" : "−") + U.fmt(Math.abs(n - p), "int") + " frente a la semana pasada";
+    c.append(U.el("span", "ux-chg", d));
+    const row = U.el("div", "ux-stats");
+    row.append(U.el("span", "ux-pill " + (["Alta","Media","Baja"].includes(r.amenaza) ? r.amenaza : "Media"), "Amenaza " + String(r.amenaza || "—").toLowerCase(), ["competidores", "amenaza", i]),
+      U.el("span", "ux-stat", (r.actividad || "") + (r.seguidores ? " · " + r.seguidores + " seguidores" : ""), ["competidores", "actividad", i]));
+    c.append(row); el.appendChild(c);
+  });
+});
+dash.draw("comp-temas", el => {
+  el.replaceChildren(); const s = dash.data("competencia_temas"); if (s.status !== "ok" || !s.data.length) return;
+  const f = U.latest(s.data, "semana"), rows = s.data.filter(r => String(r.semana) === f);
+  const temas = [...new Set(rows.map(r => r.tema))], actores = [...new Set(rows.map(r => r.actor))];
+  const us = a => /urbantex/i.test(a);
+  const t = U.el("table", "ux-mx"), hr = document.createElement("tr");
+  hr.append(U.el("th", null, "Tema")); actores.forEach(a => hr.append(U.el("th", us(a) ? "us" : null, a)));
+  const th = document.createElement("thead"); th.append(hr); t.append(th);
+  const tb = document.createElement("tbody");
+  temas.forEach(tm => {
+    const tr = document.createElement("tr"), first = U.el("td", null, tm);
+    const v = a => (rows.find(r => r.tema === tm && r.actor === a) || {}).valor;
+    const usV = v(actores.find(us)), ellos = actores.filter(a => !us(a)).map(v);
+    if (usV === "Sí" && !ellos.includes("Sí")) first.append(U.el("span", "ux-gap fav", "Hueco a favor"));
+    else if (usV === "No" && ellos.includes("Sí")) first.append(U.el("span", "ux-gap contra", "Ellos sí"));
+    tr.append(first);
+    actores.forEach(a => {
+      const r = rows.find(x => x.tema === tm && x.actor === a), i = s.data.indexOf(r), val = r ? r.valor : null;
+      const td = U.el("td", us(a) ? "us" : null); if (r) { td.setAttribute("data-source", "competencia_temas"); td.setAttribute("data-field", "valor"); td.setAttribute("data-row", String(i)); }
+      if (val === "Sí") { const d = U.el("span", "ux-dot si" + (us(a) ? " us" : "")); d.setAttribute("role", "img"); d.setAttribute("aria-label", "Sí"); td.append(d); }
+      else if (val === "No") { const d = U.el("span", "ux-dot no"); d.setAttribute("role", "img"); d.setAttribute("aria-label", "No"); td.append(d); }
+      else if (val === "No visto") { const d = U.el("span", "ux-dot nv"); d.setAttribute("role", "img"); d.setAttribute("aria-label", "No visto en sus anuncios"); td.append(d); }
+      else td.append(U.el("span", "ux-q", "sin datos"));
+      tr.append(td);
+    });
+    tb.append(tr);
+  });
+  t.append(tb); el.append(t);
+  const lg = U.el("div", "ux-legend");
+  [["si", "Lo dice"], ["no", "No lo dice"], ["nv", "No visto en sus anuncios"]].forEach(([k, txt]) => { const w = U.el("span"); w.append(U.el("span", "ux-dot " + k), document.createTextNode(" " + txt)); lg.append(w); });
+  lg.append(U.el("span", null, "«sin datos»: no pauta, falta revisar su orgánico"));
+  el.append(lg);
+});
+dash.draw("competidores", el => {
+  el.replaceChildren(); const c0 = compRows(); if (!c0) return;
+  c0.rows.forEach(r => {
+    const i = c0.s.data.indexOf(r), c = U.el("div", "ux-card");
+    const head = U.el("div", "ux-row"); head.style.justifyContent = "space-between"; head.style.alignItems = "center";
+    head.append(U.el("p", "ux-t", r.competidor, ["competidores", "competidor", i]), U.el("span", "ux-pill " + (["Alta","Media","Baja"].includes(r.amenaza) ? r.amenaza : "Media"), U.fmt(r.anuncios_activos, "int") + " anuncios"));
+    c.append(head);
+    const dl = U.el("dl", "ux-fields");
+    let tags = null;
+    if (r.oferta) { tags = U.el("div", "ux-tags"); tags.setAttribute("data-source", "competidores"); tags.setAttribute("data-field", "oferta"); tags.setAttribute("data-row", String(i)); String(r.oferta).split(" · ").forEach(x => tags.append(U.el("span", "ux-tag", x))); }
+    fieldRows(dl, [["Gancho", r.gancho, ["competidores","gancho",i]], ["Oferta", tags], ["CTA", r.cta, ["competidores","cta",i]], ["Formato", r.formato, ["competidores","formato",i]], ["Ritmo", r.ritmo, ["competidores","ritmo",i]]]);
+    c.append(dl);
+    const sa = dash.data("competencia_anuncios");
+    const adsAll = sa.status === "ok" ? sa.data.filter(a => a.competidor === r.competidor) : [];
+    const fa = adsAll.length ? U.latest(adsAll, "semana") : null;
+    const ads = adsAll.filter(a => String(a.semana) === fa).sort((x, y) => (x.orden || 9) - (y.orden || 9));
+    if (ads.length) {
+      c.style.gridColumn = "1 / -1";
+      c.append(U.el("span", "ux-k", "Sus anuncios con más alcance"));
+      const g2 = U.el("div", "ux-ads");
+      ads.forEach(a => {
+        const h = U.safeLink(a.link), w = U.el(h ? "a" : "div", "ux-ad");
+        w.setAttribute("data-source", "competencia_anuncios"); w.setAttribute("data-row", String(sa.data.indexOf(a))); w.setAttribute("data-field", "tema");
+        if (h) { w.href = h; w.target = "_blank"; w.rel = "noopener noreferrer"; w.setAttribute("aria-label", "Ver el anuncio en la Biblioteca: " + (a.tema || "")); }
+        const t = U.el("div", "ux-thumb");
+        if (typeof a.miniatura === "string" && a.miniatura.startsWith("data:image/")) { const img = document.createElement("img"); img.src = a.miniatura; img.alt = ""; t.append(img); } else t.textContent = "▶";
+        w.append(t);
+        if (a.variantes) w.append(U.el("em", null, a.variantes + " variantes del mismo video"));
+        w.append(U.el("span", null, a.tema));
+        g2.append(w);
+      });
+      c.append(g2);
+    }
+    const g = U.el("div", "ux-3");
+    [["tomar", "Tomar", r.tomar], ["evitar", "Evitar", r.evitar], ["opor", "Oportunidad", r.oportunidad]].forEach(([k, lab, v]) => {
+      if (!v) return; const b = U.el("div", k); b.append(U.el("b", null, lab), U.el("span", null, v, ["competidores", k === "opor" ? "oportunidad" : k, i])); g.append(b);
+    });
+    if (g.children.length) c.append(g);
+    if (r.angulo) { const d = U.el("details", "ux-more"); d.append(U.el("summary", null, "Ver detalle"), U.el("p", "ux-p", r.angulo, ["competidores", "angulo", i])); c.append(d); }
+    const a = U.link(r.link, "Ver sus anuncios en la Biblioteca ↗"); if (a) c.append(a);
+    el.appendChild(c);
+  });
+});
+dash.draw("proxima", el => {
+  el.replaceChildren(); const s = dash.data("proxima_campana"); if (s.status !== "ok" || !s.data.length) return;
+  const compact = el.hasAttribute("data-compact");
+  const f = U.latest(s.data, "semana");
+  let rows = s.data.filter(r => String(r.semana) === f).sort((a, b) => (a.orden || 9) - (b.orden || 9));
+  if (compact) rows = rows.slice(0, 1);
+  const rs = dash.data("reels");
+  rows.forEach((r, k) => {
+    const i = s.data.indexOf(r), c = U.el("div", "ux-nx" + (k === 0 ? " main" : ""));
+    const side = U.el("div", "side");
+    side.append(U.el("span", "when", r.cuando, ["proxima_campana", "cuando", i]));
+    const listo = r.contenido_estado === "Ya publicado";
+    if (listo) { const reel = rs.status === "ok" ? rs.data.find(x => x.link === r.link) : null; side.append(U.thumb(reel || {link: r.link}, false)); }
+    else { const t = U.el("div", "todo"); t.append(U.el("b", null, "✎"), U.el("span", null, "Contenido por crear")); side.append(t); }
+    const body = U.el("div", "main-body");
+    const chips = U.el("div", "ux-stats");
+    chips.append(U.el("span", "ux-chip " + (listo ? "ok" : "warn"), listo ? "✓ Contenido ya publicado" : "✎ Contenido por crear", ["proxima_campana", "contenido_estado", i]),
+      U.el("span", "ux-chip", r.estado || "Propuesta", ["proxima_campana", "estado", i]));
+    body.append(chips, U.el("p", "name", r.nombre, ["proxima_campana", "nombre", i]), U.el("p", "ux-p", r.contenido, ["proxima_campana", "contenido", i]));
+    const why = String(r.por_que || "").split("|").map(x => x.trim()).filter(Boolean);
+    if (why.length) {
+      body.append(U.el("span", "ux-k", "Por qué"));
+      const ol = U.el("ol", "ux-why"); ol.setAttribute("data-source", "proxima_campana"); ol.setAttribute("data-field", "por_que"); ol.setAttribute("data-row", String(i));
+      (compact ? why.slice(0, 2) : why).forEach(w => ol.append(U.el("li", null, w))); body.append(ol);
+    }
+    if (!compact) {
+      const facts = U.el("div", "ux-facts");
+      [["Objetivo", "objetivo"], ["Público", "publico"], ["Presupuesto", "presupuesto"], ["Meta", "meta"]].forEach(([lab, fk]) => {
+        if (!r[fk]) return; const d = U.el("div", "ux-fact"); d.append(U.el("span", null, lab), U.el("div", null, r[fk], ["proxima_campana", fk, i])); facts.append(d);
+      });
+      body.append(facts);
+      const gu = String(r.guion || "").split("|").map(x => x.trim()).filter(Boolean);
+      if (gu.length) {
+        body.append(U.el("span", "ux-k", "Guion sugerido"));
+        const ol = U.el("ol", "ux-why"); ol.setAttribute("data-source", "proxima_campana"); ol.setAttribute("data-field", "guion"); ol.setAttribute("data-row", String(i));
+        gu.forEach(w => ol.append(U.el("li", null, w))); body.append(ol);
+      }
+      if (r.condicion) body.append(U.el("p", "ux-do", "→ " + r.condicion, ["proxima_campana", "condicion", i]));
+      if (r.responsable) { const w = U.el("div", "ux-row"); w.style.alignItems = "center"; w.append(U.el("span", "ux-av", INI(r.responsable)), U.el("span", "ux-who", r.responsable, ["proxima_campana", "responsable", i])); body.append(w); }
+    }
+    if (listo) { const a = U.link(r.link, "Ver el reel ↗"); if (a) body.append(a); }
+    c.append(side, body); el.appendChild(c);
+  });
+});
+
+function hbar(el, rows, label, val, fmt, aria, color){
+  el.replaceChildren();
+  const W = (el.clientWidth || 600) - 32, bh = 26, gap = 12, m = {t: 4, r: 80, b: 4, l: Math.min(260, W * 0.42)};
+  const H = m.t + m.b + rows.length * (bh + gap);
+  const svg = d3.select(el).append("svg").attr("width", "100%").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img").attr("aria-label", aria);
+  const x = d3.scaleLinear().domain([0, d3.max(rows, val) || 1]).range([0, W - m.l - m.r]);
+  const g = svg.selectAll("g").data(rows).join("g").attr("transform", (d, i) => `translate(0,${m.t + i * (bh + gap)})`);
+  g.append("text").attr("x", m.l - 10).attr("y", bh / 2).attr("dy", "0.35em").attr("text-anchor", "end")
+    .style("fill", "#16171A").style("font-size", "12px")
+    .text(d => { const s = label(d); const max = Math.max(12, Math.floor(m.l / 7)); return s.length > max ? s.slice(0, max - 1) + "…" : s; });
+  g.append("rect").attr("x", m.l).attr("height", bh).attr("rx", 6).attr("width", d => Math.max(2, x(val(d) || 0))).style("fill", d => color ? color(d) : UB.or);
+  g.append("text").attr("x", d => m.l + x(val(d) || 0) + 8).attr("y", bh / 2).attr("dy", "0.35em")
+    .style("fill", "#4B4A48").style("font-size", "12px").style("font-weight", "600").style("font-variant-numeric", "tabular-nums").text(d => fmt(val(d)));
+  const t = U.tip(el);
+  g.on("pointermove", (ev, d) => { t.hidden = false; t.textContent = label(d) + " · " + fmt(val(d)); const [px, py] = d3.pointer(ev, el);
+    t.style.left = Math.max(0, Math.min(px + 10, el.clientWidth - t.offsetWidth)) + "px"; t.style.top = (py - 34) + "px"; })
+   .on("pointerleave", () => { t.hidden = true; });
+}
+
+dash.draw("ads-diario", el => {
+  const s = dash.data("ads_diario"); el.replaceChildren();
+  if (s.status === "error") { el.textContent = "No se pudo cargar"; return; }
+  if (s.status !== "ok") return;
+  if (!s.data.length) { el.textContent = "Todavía no hay días con gasto."; return; }
+  const by = d3.rollups(s.data, v => ({g: d3.sum(v, d => +d.gasto || 0), c: d3.sum(v, d => +d.conversaciones || 0)}), d => d.fecha)
+    .map(([f, o]) => ({fecha: f, gasto: o.g, conv: o.c, cpc: o.c ? o.g / o.c : null})).sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const W = (el.clientWidth || 600) - 32, H = 240, m = {t: 12, r: 52, b: 28, l: 36};
+  const svg = d3.select(el).append("svg").attr("width", "100%").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img").attr("aria-label", "Conversaciones y costo por conversación por día");
+  const x = d3.scaleBand().domain(by.map(d => d.fecha)).range([m.l, W - m.r]).padding(0.35);
+  const y = d3.scaleLinear().domain([0, d3.max(by, d => d.conv) || 1]).nice().range([H - m.b, m.t]);
+  const y2 = d3.scaleLinear().domain([0, d3.max(by, d => d.cpc || 0) || 1]).nice().range([H - m.b, m.t]);
+  const every = Math.ceil(by.length / Math.max(2, Math.floor(W / 64)));
+  svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(by.map(d => d.fecha).filter((d, i) => i % every === 0)).tickFormat(U.fecha).tickSizeOuter(0));
+  svg.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat(U.int)).call(g => g.select(".domain").remove());
+  svg.append("g").attr("transform", `translate(${W - m.r},0)`).call(d3.axisRight(y2).ticks(4).tickFormat(U.money)).call(g => g.select(".domain").remove());
+  svg.append("g").selectAll("rect").data(by).join("rect").attr("x", d => x(d.fecha)).attr("width", x.bandwidth()).attr("rx", 5)
+    .attr("y", d => y(d.conv)).attr("height", d => y(0) - y(d.conv)).style("fill", UB.or);
+  const line = d3.line().defined(d => d.cpc != null).x(d => x(d.fecha) + x.bandwidth() / 2).y(d => y2(d.cpc));
+  svg.append("path").datum(by).attr("d", line).attr("fill", "none").style("stroke", UB.slate).attr("stroke-width", 2.5);
+  svg.append("g").selectAll("circle").data(by.filter(d => d.cpc != null)).join("circle").attr("cx", d => x(d.fecha) + x.bandwidth() / 2).attr("cy", d => y2(d.cpc)).attr("r", 4).style("fill", UB.slate);
+  const t = U.tip(el);
+  svg.append("g").selectAll("rect").data(by).join("rect").attr("x", d => x(d.fecha) - x.step() * x.paddingInner() / 2).attr("width", x.step())
+    .attr("y", m.t).attr("height", H - m.t - m.b).attr("fill", "transparent")
+    .on("pointermove", (ev, d) => { t.hidden = false; t.textContent = `${U.fecha(d.fecha)} · ${U.int(d.conv)} chats · ${U.money(d.gasto)} · ${d.cpc == null ? "—" : U.money(d.cpc)} por chat`;
+      const [px, py] = d3.pointer(ev, el); t.style.left = Math.max(0, Math.min(px + 10, el.clientWidth - t.offsetWidth)) + "px"; t.style.top = (py - 34) + "px"; })
+    .on("pointerleave", () => { t.hidden = true; });
+});
+
+dash.draw("ads-semanal", el => {
+  const s = dash.data("ads_semanal");
+  if (s.status === "error") { el.textContent = "No se pudo cargar"; return; }
+  if (s.status !== "ok") { el.replaceChildren(); return; }
+  const rows = s.data.filter(r => r.costo_conv != null).sort((a, b) => String(b.semana_inicio).localeCompare(String(a.semana_inicio))).slice(0, 8);
+  el.style.minHeight = "0";
+  hbar(el, rows, d => d.periodo + " · " + d.campana, d => +d.costo_conv, U.money, "Costo por conversación por semana y campaña",
+    d => +d.costo_conv > 1 ? UB.bad : UB.or);
+});
+dash.draw("ads-semanal-tbl", tb => U.table(tb, "ads_semanal", [{f:"periodo"},{f:"campana"},{f:"gasto",kind:"money"},{f:"conversaciones",kind:"int"},{f:"costo_conv",kind:"money"}],
+  {key:["clave"], sort:(a,b)=>String(b.semana_inicio).localeCompare(String(a.semana_inicio))}));
+dash.draw("ads-anuncios-tbl", tb => U.table(tb, "ads_anuncios", [{f:"anuncio"},{f:"periodo"},{f:"conversaciones",kind:"int"},{f:"costo_conv",kind:"money"},{f:"estado"}], {key:["anuncio"]}));
+
+dash.draw("reels-tbl", tb => U.table(tb, "reels", [{f:"fecha",kind:"date"},{f:"reel"},{f:"vistas",kind:"int"},{f:"alcance",kind:"int"},{f:"guardados",kind:"int"},{f:"compartidos",kind:"int"},{f:"seguidores",kind:"int"}],
+  {key:["fecha","reel"], sort:(a,b)=>String(b.fecha).localeCompare(String(a.fecha))}));
+
+dash.draw("embudo-chart", el => {
+  const s = dash.data("embudo_total");
+  if (s.status !== "ok" || !Array.isArray(s.data)) { el.replaceChildren(); return; }
+  el.style.minHeight = "0";
+  const rows = s.data, top = rows[0].valor || 1, cols = [UB.or, "#E8894D", UB.slate, "#5C6B80", "#2F8F5B"];
+  hbar(el, rows, d => d.etapa, d => d.valor, v => U.int(v) + (rows[0].valor ? "  (" + U.pct(v / top) + ")" : ""), "Embudo del chat al cliente", d => cols[rows.indexOf(d)] || UB.or);
+});
+dash.draw("embudo", tb => {
+  const c = dash.data("embudo_costos");
+  const costs = (c.status === "ok" && Array.isArray(c.data)) ? c.data : [];
+  const get = (r, k) => { const x = costs.find(z => z.clave === r.clave); return x ? x[k] : null; };
+  U.table(tb, "embudo", [{f:"periodo"},{f:"campana"},{f:"conversaciones",kind:"int"},{f:"llamadas_realizadas",kind:"int"},{f:"cotizaciones",kind:"int"},{f:"clientes",kind:"int"},
+    {get: r => get(r, "costo_llamada"), kind:"money"},{get: r => get(r, "costo_cliente"), kind:"money"}],
+    {key:["clave"], sort:(a,b)=>String(b.semana_inicio).localeCompare(String(a.semana_inicio))});
+});
+</script>
+
+<p class="ux-copy">Copia del dashboard de Urbantex para el equipo · Se actualiza cada mañana y los lunes · Confidencial: no compartir fuera del equipo</p>
+</body>
+</html>
