@@ -13,6 +13,27 @@
    "tipo": "Dos campañas viejas siguen «activas»",
    "mensaje": "«Feria de Cantón · Oct» y «Publicación de Instagram: ¿Ya automatizaste una...» figuran activas en Meta pero no gastan.",
    "accion": "Apagarlas en Ads Manager para ordenar la cuenta."
+  },
+  {
+   "fecha": "2026-11-18",
+   "nivel": "Info",
+   "tipo": "Primer día completo de «Orden cambia · Nov»",
+   "mensaje": "17 nov cerró con $3,32 gastados, 4 conversaciones a $0,83 cada una, 1.438 impresiones y frecuencia 1,06. Hoy va en $1,25 y 1 conversación (parcial).",
+   "accion": "No tocarla hasta el 20 nov; anotar en el embudo cuántas conversaciones pasan a llamada."
+  },
+  {
+   "fecha": "2026-11-19",
+   "nivel": "Alta",
+   "tipo": "Costo por conversación sobre $1",
+   "mensaje": "El 18 nov «Orden cambia · Nov» gastó $4,10 y logró 3 conversaciones: $1,37 cada una (el 17 nov fue $0,83). El promedio de los dos días es $1,06.",
+   "accion": "No cambiar la campaña todavía (lleva dos días); si el 20 nov sigue por encima de $1 y las conversaciones no pasan a llamada, evaluar volver a probar V2 · Juan Carlos MDF."
+  },
+  {
+   "fecha": "2026-11-19",
+   "nivel": "Info",
+   "tipo": "Embudo sin datos de «Orden cambia · Nov»",
+   "mensaje": "La hoja del embudo semanal todavía no tiene una fila para «Orden cambia · Nov» (7 conversaciones entre el 17 y el 18 nov).",
+   "accion": "Agregar la fila de la semana del 16 nov con llamadas ofrecidas, llamadas hechas y cotizaciones."
   }
  ]
 }

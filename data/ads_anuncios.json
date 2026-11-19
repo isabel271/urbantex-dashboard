@@ -39,10 +39,10 @@
   {
    "anuncio": "N1 · Orden cambia 9 nov",
    "campana": "Orden cambia · Nov",
-   "periodo": "11–17 nov (solo entregó el 17, parcial)",
-   "conversaciones": 4,
-   "costo_conv": 0.56,
-   "frecuencia": 1.09,
+   "periodo": "12–18 nov (entrega desde el 17)",
+   "conversaciones": 7,
+   "costo_conv": 1.06,
+   "frecuencia": 1.08,
    "estado": "Activo"
   }
  ]

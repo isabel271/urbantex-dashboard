@@ -3,13 +3,24 @@
   {
    "fecha": "2026-11-17",
    "campana": "Orden cambia · Nov",
-   "gasto": 2.23,
+   "gasto": 3.32,
    "conversaciones": 4,
-   "costo_conv": 0.56,
-   "impresiones": 812,
-   "alcance": 744,
-   "ctr": 1.35,
-   "frecuencia_acumulada": 1.09
+   "costo_conv": 0.83,
+   "impresiones": 1438,
+   "alcance": 1357,
+   "ctr": 1.18,
+   "frecuencia_acumulada": 1.06
+  },
+  {
+   "fecha": "2026-11-18",
+   "campana": "Orden cambia · Nov",
+   "gasto": 4.1,
+   "conversaciones": 3,
+   "costo_conv": 1.37,
+   "impresiones": 2190,
+   "alcance": 2078,
+   "ctr": 1.37,
+   "frecuencia_acumulada": 1.08
   }
  ]
 }
