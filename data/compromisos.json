@@ -1,0 +1,48 @@
+{
+ "rows": [
+  {
+   "semana": "2026-11-23",
+   "orden": 1,
+   "tipo": "Campaña",
+   "compromiso": "Evaluar «Orden cambia · Nov» con el embudo. Si sigue sobre $1 por chat y sin llamadas, activar «Maquinaria · Dic».",
+   "responsable": "Domingo",
+   "fecha": "2026-11-26",
+   "estado": "Propuesto",
+   "aprobar_antes": "jueves 27 nov",
+   "evidencia": null
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 2,
+   "tipo": "Contenido",
+   "compromiso": "Grabar y publicar la pieza 1: Calendario de ferias en China 2027.",
+   "responsable": "Domingo graba · Gaby edita · Yeni publica",
+   "fecha": "2026-12-01",
+   "estado": "Propuesto",
+   "aprobar_antes": "jueves 27 nov",
+   "evidencia": null
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 3,
+   "tipo": "Contenido",
+   "compromiso": "Grabar y publicar la pieza 2: No hace falta esperar a la feria.",
+   "responsable": "Domingo graba · Gaby edita · Yeni publica",
+   "fecha": "2026-12-03",
+   "estado": "Propuesto",
+   "aprobar_antes": "jueves 27 nov",
+   "evidencia": null
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 4,
+   "tipo": "Community",
+   "compromiso": "Trabajar el Radar de visibilidad: 5 negocios y 5 voces por día, 15 a 20 minutos.",
+   "responsable": "Community (por asignar · provisional: Yeni)",
+   "fecha": "2026-11-24",
+   "estado": "Propuesto",
+   "aprobar_antes": "jueves 27 nov",
+   "evidencia": null
+  }
+ ]
+}

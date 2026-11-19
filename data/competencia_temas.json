@@ -2,6 +2,114 @@
  "rows": [
   {
    "semana": "2026-11-16",
+   "tema": "Consolidación de carga",
+   "actor": "Pinchili",
+   "valor": "Sí"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Consolidación de carga",
+   "actor": "All You Can China",
+   "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Consolidación de carga",
+   "actor": "China te Espera",
+   "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Consolidación de carga",
+   "actor": "Royer Herazo",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Consolidación de carga",
+   "actor": "Asesorcomex",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Consolidación de carga",
+   "actor": "Urbantex",
+   "valor": "No"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Descuentos y promociones",
+   "actor": "Pinchili",
+   "valor": "Sí"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Descuentos y promociones",
+   "actor": "All You Can China",
+   "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Descuentos y promociones",
+   "actor": "China te Espera",
+   "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Descuentos y promociones",
+   "actor": "Royer Herazo",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Descuentos y promociones",
+   "actor": "Asesorcomex",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Descuentos y promociones",
+   "actor": "Urbantex",
+   "valor": "No"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Eventos o talleres presenciales",
+   "actor": "Pinchili",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Eventos o talleres presenciales",
+   "actor": "All You Can China",
+   "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Eventos o talleres presenciales",
+   "actor": "China te Espera",
+   "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Eventos o talleres presenciales",
+   "actor": "Royer Herazo",
+   "valor": "Sí"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Eventos o talleres presenciales",
+   "actor": "Asesorcomex",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Eventos o talleres presenciales",
+   "actor": "Urbantex",
+   "valor": "No"
+  },
+  {
+   "semana": "2026-11-16",
    "tema": "Feria de Cantón",
    "actor": "Pinchili",
    "valor": "Sí"
@@ -17,6 +125,18 @@
    "tema": "Feria de Cantón",
    "actor": "China te Espera",
    "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Feria de Cantón",
+   "actor": "Royer Herazo",
+   "valor": "Sí"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Feria de Cantón",
+   "actor": "Asesorcomex",
+   "valor": "Sí"
   },
   {
    "semana": "2026-11-16",
@@ -41,6 +161,18 @@
    "tema": "Financiamiento de la compra",
    "actor": "China te Espera",
    "valor": "Sin datos"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Financiamiento de la compra",
+   "actor": "Royer Herazo",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Financiamiento de la compra",
+   "actor": "Asesorcomex",
+   "valor": "No visto"
   },
   {
    "semana": "2026-11-16",
@@ -50,51 +182,39 @@
   },
   {
    "semana": "2026-11-16",
-   "tema": "Descuentos y promociones",
+   "tema": "Representación en China (alguien tuyo allá)",
    "actor": "Pinchili",
-   "valor": "Sí"
+   "valor": "No visto"
   },
   {
    "semana": "2026-11-16",
-   "tema": "Descuentos y promociones",
+   "tema": "Representación en China (alguien tuyo allá)",
    "actor": "All You Can China",
    "valor": "Sin datos"
   },
   {
    "semana": "2026-11-16",
-   "tema": "Descuentos y promociones",
+   "tema": "Representación en China (alguien tuyo allá)",
    "actor": "China te Espera",
    "valor": "Sin datos"
   },
   {
    "semana": "2026-11-16",
-   "tema": "Descuentos y promociones",
-   "actor": "Urbantex",
-   "valor": "No"
+   "tema": "Representación en China (alguien tuyo allá)",
+   "actor": "Royer Herazo",
+   "valor": "No visto"
   },
   {
    "semana": "2026-11-16",
-   "tema": "Consolidación de carga",
-   "actor": "Pinchili",
+   "tema": "Representación en China (alguien tuyo allá)",
+   "actor": "Asesorcomex",
+   "valor": "No visto"
+  },
+  {
+   "semana": "2026-11-16",
+   "tema": "Representación en China (alguien tuyo allá)",
+   "actor": "Urbantex",
    "valor": "Sí"
-  },
-  {
-   "semana": "2026-11-16",
-   "tema": "Consolidación de carga",
-   "actor": "All You Can China",
-   "valor": "Sin datos"
-  },
-  {
-   "semana": "2026-11-16",
-   "tema": "Consolidación de carga",
-   "actor": "China te Espera",
-   "valor": "Sin datos"
-  },
-  {
-   "semana": "2026-11-16",
-   "tema": "Consolidación de carga",
-   "actor": "Urbantex",
-   "valor": "No"
   },
   {
    "semana": "2026-11-16",
@@ -117,30 +237,18 @@
   {
    "semana": "2026-11-16",
    "tema": "Verificar fábricas en el terreno",
-   "actor": "Urbantex",
-   "valor": "Sí"
-  },
-  {
-   "semana": "2026-11-16",
-   "tema": "Representación en China (alguien tuyo allá)",
-   "actor": "Pinchili",
+   "actor": "Royer Herazo",
    "valor": "No visto"
   },
   {
    "semana": "2026-11-16",
-   "tema": "Representación en China (alguien tuyo allá)",
-   "actor": "All You Can China",
-   "valor": "Sin datos"
+   "tema": "Verificar fábricas en el terreno",
+   "actor": "Asesorcomex",
+   "valor": "No visto"
   },
   {
    "semana": "2026-11-16",
-   "tema": "Representación en China (alguien tuyo allá)",
-   "actor": "China te Espera",
-   "valor": "Sin datos"
-  },
-  {
-   "semana": "2026-11-16",
-   "tema": "Representación en China (alguien tuyo allá)",
+   "tema": "Verificar fábricas en el terreno",
    "actor": "Urbantex",
    "valor": "Sí"
   }

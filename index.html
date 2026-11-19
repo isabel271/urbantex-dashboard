@@ -15,7 +15,7 @@ body{padding:16px}
 <script src="d3.min.js"></script>
 <script>
 window.dash = (function(){
-  const IDS = ["resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","propuestas","proxima_campana","embudo","alertas"];
+  const IDS = ["resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","competencia_organico","competencia_preguntas","propuestas","proxima_campana","compromisos","piezas","radar_voces","radar_negocios","embudo","alertas"];
   const raw = {}, failed = {}, calcs = {}, draws = {}, hooks = [];
   function data(id){
     if (calcs[id]) {
@@ -165,6 +165,22 @@ window.dash = (function(){
 .ux-ad:hover .ux-thumb{outline:3px solid var(--or)}
 .ux-ad em{font-style:normal;font-size:11px;font-weight:700;color:var(--or)}
 .ux-ad span{font-size:12px;line-height:1.3;color:var(--txt2)}
+.ux-commits{display:flex;flex-direction:column;gap:10px}
+.ux-commit{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--sand);border-radius:12px;padding:14px 16px}
+.ux-commit .mid{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ux-ctype{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--or)}
+.ux-ctype.Contenido{color:var(--slate)}.ux-ctype.Community{color:var(--ok)}
+.ux-est{align-self:center;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.ux-est.ok{background:#DDF0E4;color:var(--ok)}.ux-est.warn{background:#FCEFD6;color:#8A5A0B}.ux-est.bad{background:#F9E3E0;color:var(--bad)}.ux-est.sl{background:#E3E7EE;color:var(--slate)}.ux-est.mute{background:var(--sand);color:var(--stone)}
+.ux-scorebox{display:flex;align-items:baseline;gap:8px;background:var(--card);border:1px solid var(--sand);border-radius:12px;padding:12px 16px}
+.ux-hook{font-family:var(--font-anthropic-serif);font-size:18px;line-height:1.35;margin:0;color:var(--ink)}
+.ux-subtabs{display:flex;gap:6px;border-bottom:2px solid var(--sand);margin-bottom:4px}
+.ux-subtab{font:inherit;font-size:14px;font-weight:600;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;padding:8px 14px;color:var(--stone);cursor:pointer}
+.ux-subtab.on{color:var(--ink);border-bottom-color:var(--or)}
+.ux-subpage{display:flex;flex-direction:column;gap:36px}
+.ux-orggroup{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+.ux-orggroup h3{margin:0;font-size:15px;font-weight:700;color:var(--ink)}
+@media (max-width:640px){.ux-commit{grid-template-columns:1fr}}
 @media (max-width:640px){.ux-nx{grid-template-columns:1fr}.ux-nx .side{flex-direction:row;align-items:center}.ux-nx .side .ux-thumb,.ux-nx .todo{width:90px;flex:none}}
 </style>
 
@@ -180,10 +196,24 @@ window.dash = (function(){
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="ads">Ads</button>
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="contenido">Contenido</button>
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="competencia">Competencia</button>
+  <button class="ux-tab" role="tab" aria-selected="false" data-tab="comunidad">Comunidad</button>
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="embudo">Embudo</button>
 </nav>
 
 <section class="ux-page" id="resumen" data-page="resumen">
+  <div class="ux-block" id="esta-semana">
+    <h2 class="ux-h">Esta semana</h2>
+    <p class="ux-sub" data-draw="semana-sub" data-source="compromisos">—</p>
+    <div data-draw="semana-score" data-source="compromisos"></div>
+    <div class="ux-commits" data-draw="compromisos" data-source="compromisos"></div>
+  </div>
+
+  <div class="ux-block" id="piezas-semana">
+    <h2 class="ux-h">Piezas de la semana</h2>
+    <p class="ux-sub">Listas para grabar: gancho, guion, caption y llamado a la acción.</p>
+    <div class="ux-grid2" data-draw="piezas" data-source="piezas"></div>
+  </div>
+
   <div class="ux-block" id="campanas-hoy">
     <h2 class="ux-h">Campañas activas</h2>
     <p class="ux-empty" data-empty="campanas" hidden>No hay campañas corriendo ahora.</p>
@@ -206,12 +236,6 @@ window.dash = (function(){
     <ul class="ux-alerts" data-draw="alertas-top" data-source="alertas"></ul>
   </div>
 
-  <div class="ux-block" id="proxima">
-    <h2 class="ux-h">Próxima campaña sugerida</h2>
-    <p class="ux-sub">Sale de cruzar los reels, los ads, el embudo y la competencia. Se revisa cada lunes. Nada se prende sin la aprobación de Isabel.</p>
-    <div class="ux-next" data-draw="proxima" data-source="proxima_campana reels"></div>
-  </div>
-
   <div class="ux-block" id="destacado">
     <h2 class="ux-h">Lo que mejor funciona</h2>
     <div class="ux-grid2">
@@ -220,23 +244,17 @@ window.dash = (function(){
     </div>
   </div>
 
-  <div class="ux-block" id="semana">
-    <h2 class="ux-h">Propuestas de la semana</h2>
-    <p class="ux-sub">Nada se publica ni se cambia en Meta sin la aprobación de Isabel.</p>
-    <div class="ux-grid2" data-draw="propuestas" data-source="propuestas"></div>
-    <details class="ux-more"><summary>Ver todas las propuestas</summary>
-      <div class="ux-scroll"><table class="ux-tbl" data-source="propuestas" data-row-key="semana,propuesta">
-        <thead><tr><th data-field="semana">Semana</th><th data-field="tipo">Tipo</th><th data-field="propuesta">Propuesta</th><th data-field="responsable">Responsable</th><th data-field="estado">Estado</th></tr></thead>
-        <tbody data-draw="propuestas-tbl"></tbody>
-      </table></div>
-    </details>
-  </div>
 </section>
 
 <section class="ux-page" id="ads" data-page="ads" hidden>
   <div class="ux-block" id="ads-camp">
     <h2 class="ux-h">Campañas activas</h2>
     <div class="ux-grid2" data-draw="campanas" data-source="campanas"></div>
+  </div>
+  <div class="ux-block" id="proxima">
+    <h2 class="ux-h">Próximas campañas sugeridas</h2>
+    <p class="ux-sub">Se recalcula cada lunes a partir de reels, ads, embudo y competencia. Requiere aprobación antes de activarse.</p>
+    <div class="ux-next" data-draw="proxima" data-source="proxima_campana reels"></div>
   </div>
   <div class="ux-block" id="ads-dia">
     <h2 class="ux-h">Día a día</h2>
@@ -291,6 +309,11 @@ window.dash = (function(){
 </section>
 
 <section class="ux-page" id="competencia" data-page="competencia" hidden>
+  <nav class="ux-subtabs" role="tablist" aria-label="Competencia">
+    <button class="ux-subtab on" role="tab" aria-selected="true" data-subtab="comp-ads">Ads</button>
+    <button class="ux-subtab" role="tab" aria-selected="false" data-subtab="comp-organico">Contenido orgánico</button>
+  </nav>
+  <div class="ux-subpage" data-subpage="comp-ads">
   <div class="ux-block" id="comp-pulso">
     <h2 class="ux-h">Pulso de la semana</h2>
     <p class="ux-sub">Anuncios activos en la Biblioteca de Anuncios de Meta. Se actualiza cada lunes.</p>
@@ -308,15 +331,49 @@ window.dash = (function(){
   </div>
   <div class="ux-block" id="comp-next">
     <h2 class="ux-h">Qué hacemos con esto</h2>
-    <p class="ux-sub">La campaña que se sugiere a partir de este análisis. El detalle completo está en Resumen.</p>
+    <p class="ux-sub">La campaña que se sugiere a partir de este análisis. El detalle completo está en la pestaña Ads.</p>
     <div class="ux-next" data-draw="proxima" data-compact="1" data-source="proxima_campana reels"></div>
+  </div>
+  </div>
+  <div class="ux-subpage" data-subpage="comp-organico" hidden>
+  <div class="ux-block" id="org-top">
+    <h2 class="ux-h">Lo que les funciona en orgánico</h2>
+    <p class="ux-sub">Sus posts y reels recientes con más interacción en Instagram, con el porqué y qué tomar. Se actualiza cada lunes.</p>
+    <p class="ux-empty" data-empty="competencia_organico" hidden>El primer análisis de contenido orgánico se genera el lunes.</p>
+    <div data-draw="organico" data-source="competencia_organico"></div>
+  </div>
+  <div class="ux-block" id="comp-preguntas">
+    <h2 class="ux-h">Lo que preguntan en sus comentarios</h2>
+    <p class="ux-sub">Preguntas y opiniones repetidas en los comentarios de sus posts, sin nombres. La más fuerte se responde con contenido propio.</p>
+    <p class="ux-empty" data-empty="competencia_preguntas" hidden>La primera lectura de comentarios se genera el lunes.</p>
+    <div class="ux-grid2" data-draw="preguntas" data-source="competencia_preguntas"></div>
+  </div>
+  </div>
+</section>
+
+<section class="ux-page" id="comunidad" data-page="comunidad" hidden>
+  <div class="ux-block" id="radar-intro">
+    <h2 class="ux-h">Radar de visibilidad</h2>
+    <p class="ux-sub">Visibilidad fuera de la cuenta propia: voces donde comentar y negocios para contactar. Lo ejecuta una persona, nunca un bot.</p>
+    <div class="ux-grid" data-draw="radar-kpis" data-source="radar_voces radar_negocios"></div>
+  </div>
+  <div class="ux-block" id="radar-voces">
+    <h2 class="ux-h">Voces relevantes</h2>
+    <p class="ux-sub">Cuentas con audiencia empresarial. Seguir y comentar para aportar, nunca para vender.</p>
+    <div class="ux-grid2" data-draw="radar-voces" data-source="radar_voces"></div>
+  </div>
+  <div class="ux-block" id="radar-negocios">
+    <h2 class="ux-h">Negocios para contactar</h2>
+    <p class="ux-sub">Día 1: seguir y comentar en un post de su cuenta. Días 2 a 5: reaccionar a una o dos historias. Si responde: mensaje privado útil, sin oferta. Sin respuesta en 2 semanas: dejar de seguir.</p>
+    <p class="ux-empty" data-empty="radar_negocios" hidden>La primera lista de negocios se genera el lunes.</p>
+    <div class="ux-scroll" data-draw="radar-negocios" data-source="radar_negocios"></div>
   </div>
 </section>
 
 <section class="ux-page" id="embudo" data-page="embudo" hidden>
   <div class="ux-block" id="embudo-total">
     <h2 class="ux-h">Del chat al cliente</h2>
-    <p class="ux-sub">Suma de las semanas registradas por Isabel cada lunes.</p>
+    <p class="ux-sub">Suma de las semanas registradas cada lunes.</p>
     <div class="ux-chart" id="embudo-chart" data-draw="embudo-chart" data-source="embudo_total"></div>
   </div>
   <div class="ux-block" id="embudo-sem">
@@ -542,7 +599,7 @@ function rankCard(r, i, big){
   info.append(head, U.el("p", "ux-small", r.metrica, ["ranking", "metrica", i]));
   const a = U.link(r.link, "Ver en Instagram ↗"); if (a) info.append(a);
   row.append(info);
-  c.append(row, U.el("p", "ux-p", r.por_que, ["ranking", "por_que", i]), U.el("p", "ux-do", "→ " + r.que_hacer, ["ranking", "que_hacer", i]));
+  c.append(row, U.el("p", "ux-p", r.por_que, ["ranking", "por_que", i]));
   return c;
 }
 dash.draw("top", el => {
@@ -748,6 +805,121 @@ dash.draw("proxima", el => {
     if (listo) { const a = U.link(r.link, "Ver el reel ↗"); if (a) body.append(a); }
     c.append(side, body); el.appendChild(c);
   });
+});
+
+(function(){
+  const pickSub = (id) => {
+    document.querySelectorAll("[data-subpage]").forEach(p => { p.hidden = p.getAttribute("data-subpage") !== id; });
+    document.querySelectorAll("[data-subtab]").forEach(b => { const on = b.getAttribute("data-subtab") === id; b.className = "ux-subtab" + (on ? " on" : ""); b.setAttribute("aria-selected", on ? "true" : "false"); });
+  };
+  document.querySelectorAll("[data-subtab]").forEach(b => b.addEventListener("click", () => pickSub(b.getAttribute("data-subtab"))));
+})();
+const EST = {"Hecho":"ok","Pendiente":"warn","Propuesto":"sl","No se hizo":"bad","Sin confirmar":"mute"};
+function weekRows(id){ const s = dash.data(id); if (s.status !== "ok" || !s.data.length) return null; const f = U.latest(s.data, "semana"); return {s, f, rows: s.data.filter(r => String(r.semana) === f).sort((a, b) => (a.orden || 9) - (b.orden || 9))}; }
+dash.draw("semana-sub", el => {
+  const w = weekRows("compromisos"); if (!w) { el.textContent = "Sin compromisos cargados."; return; }
+  const ap = w.rows.find(r => r.aprobar_antes), prop = w.rows.some(r => r.estado === "Propuesto");
+  el.textContent = "Semana del " + U.fecha(w.f) + ". " + (prop && ap ? "Propuesta del sistema: se aprueba si nadie objeta antes del " + ap.aprobar_antes + "." : "Compromisos aprobados.");
+});
+dash.draw("semana-score", el => {
+  el.replaceChildren(); const s = dash.data("compromisos"); if (s.status !== "ok" || !s.data.length) return;
+  const weeks = [...new Set(s.data.map(r => String(r.semana)))].sort();
+  if (weeks.length < 2) { el.append(U.el("span", "ux-stat", "Primera semana con compromisos: el cumplimiento se mide desde la próxima.")); return; }
+  const prev = weeks[weeks.length - 2], pr = s.data.filter(r => String(r.semana) === prev), done = pr.filter(r => r.estado === "Hecho").length;
+  const c = U.el("div", "ux-scorebox"); c.append(U.el("span", "ux-big", done + " de " + pr.length), U.el("span", "ux-small", "compromisos cumplidos la semana del " + U.fecha(prev))); el.append(c);
+});
+dash.draw("compromisos", el => {
+  el.replaceChildren(); const w = weekRows("compromisos"); if (!w) return;
+  w.rows.forEach(r => {
+    const i = w.s.data.indexOf(r), st = String(r.estado || "Propuesto"), c = U.el("div", "ux-commit");
+    c.append(U.el("span", "ux-ctype " + String(r.tipo || "").replace(/\s/g, ""), r.tipo, ["compromisos", "tipo", i]));
+    const mid = U.el("div", "mid");
+    mid.append(U.el("p", "ux-t", r.compromiso, ["compromisos", "compromiso", i]), U.el("p", "ux-small", (r.responsable || "Por asignar") + " · " + U.fecha(r.fecha), ["compromisos", "responsable", i]));
+    if (r.evidencia) mid.append(U.el("p", "ux-small", r.evidencia, ["compromisos", "evidencia", i]));
+    c.append(mid, U.el("span", "ux-est " + (EST[st] || "mute"), st, ["compromisos", "estado", i])); el.append(c);
+  });
+});
+dash.draw("piezas", el => {
+  el.replaceChildren(); const w = weekRows("piezas"); if (!w) return;
+  w.rows.forEach(r => {
+    const i = w.s.data.indexOf(r), c = U.el("div", "ux-card");
+    c.append(U.el("span", "ux-chip or", "Pieza " + r.orden), U.el("p", "ux-t", r.titulo, ["piezas", "titulo", i]), U.el("p", "ux-small", r.formato, ["piezas", "formato", i]));
+    if (r.gancho) c.append(U.el("p", "ux-hook", "“" + r.gancho + "”", ["piezas", "gancho", i]));
+    const gu = String(r.guion || "").split("|").map(x => x.trim()).filter(Boolean);
+    if (gu.length) { c.append(U.el("span", "ux-k", "Guion")); const ol = U.el("ol", "ux-why"); ol.setAttribute("data-source", "piezas"); ol.setAttribute("data-field", "guion"); ol.setAttribute("data-row", String(i)); gu.forEach(x => ol.append(U.el("li", null, x))); c.append(ol); }
+    const f = U.el("div", "ux-facts");
+    [["Caption", "caption"], ["Llamado a la acción", "cta"]].forEach(([l, k]) => { if (!r[k]) return; const d = U.el("div", "ux-fact"); d.append(U.el("span", null, l), U.el("div", null, r[k], ["piezas", k, i])); f.append(d); });
+    c.append(f);
+    if (r.por_que) c.append(U.el("p", "ux-small", "Por qué: " + r.por_que, ["piezas", "por_que", i]));
+    c.append(U.el("p", "ux-small", "Graba: " + (r.graba || "—") + " · Edita: " + (r.edita || "—")));
+    const a = U.link(r.referencia, "Ver referencia ↗"); if (a) c.append(a);
+    el.append(c);
+  });
+});
+dash.draw("organico", el => {
+  el.replaceChildren(); const w = weekRows("competencia_organico"); if (!w) return;
+  const comps = [...new Set(w.rows.map(r => r.competidor))];
+  comps.forEach(cn => {
+    const g = U.el("div", "ux-orggroup"); g.append(U.el("h3", null, cn));
+    const grid = U.el("div", "ux-grid3");
+    w.rows.filter(r => r.competidor === cn).forEach(r => {
+      const i = w.s.data.indexOf(r), c = U.el("div", "ux-card"); c.style.padding = "12px";
+      c.append(U.thumb(r, true), U.el("span", "ux-chip sl", (r.formato || "Post") + (r.fecha ? " · " + U.fecha(r.fecha) : "")), U.el("p", "ux-t", r.tema, ["competencia_organico", "tema", i]));
+      const st = U.el("div", "ux-stats");
+      if (r.vistas != null) st.append(U.stat("vistas", r.vistas)); if (r.likes != null) st.append(U.stat("me gusta", r.likes)); if (r.comentarios != null) st.append(U.stat("comentarios", r.comentarios));
+      c.append(st);
+      if (r.por_que) c.append(U.el("p", "ux-small", r.por_que, ["competencia_organico", "por_que", i]));
+      if (r.idea_urbantex) c.append(U.el("p", "ux-do", "Para Urbantex: " + r.idea_urbantex, ["competencia_organico", "idea_urbantex", i]));
+      const a = U.link(r.link, "Ver en Instagram ↗"); if (a) c.append(a);
+      grid.append(c);
+    });
+    g.append(grid); el.append(g);
+  });
+});
+dash.draw("preguntas", el => {
+  el.replaceChildren(); const w = weekRows("competencia_preguntas"); if (!w) return;
+  w.rows.slice().sort((a, b) => (b.frecuencia || 0) - (a.frecuencia || 0)).forEach(r => {
+    const i = w.s.data.indexOf(r), c = U.el("div", "ux-card");
+    c.append(U.el("span", "ux-chip sl", U.fmt(r.frecuencia, "int") + " menciones"), U.el("p", "ux-t", r.tema, ["competencia_preguntas", "tema", i]), U.el("p", "ux-small", r.ejemplo, ["competencia_preguntas", "ejemplo", i]));
+    if (r.donde) c.append(U.el("p", "ux-small", "Dónde: " + r.donde, ["competencia_preguntas", "donde", i]));
+    if (r.respuesta_sugerida) c.append(U.el("p", "ux-do", "Responder con: " + r.respuesta_sugerida, ["competencia_preguntas", "respuesta_sugerida", i]));
+    el.append(c);
+  });
+});
+dash.draw("radar-kpis", el => {
+  el.replaceChildren(); const v = weekRows("radar_voces"), n = weekRows("radar_negocios");
+  const all = [...(v ? v.rows : []), ...(n ? n.rows : [])];
+  const resp = n ? n.rows.filter(r => r.etapa === "Respondió" || r.etapa === "Mensaje enviado").length : 0;
+  [["Voces esta semana", v ? v.rows.length : 0], ["Negocios esta semana", n ? n.rows.length : 0], ["Trabajados", all.filter(r => r.etapa && r.etapa !== "Por empezar").length], ["Respondieron", resp]].forEach(([l, x]) => {
+    const c = U.el("div", "ux-card ux-kpi"); c.append(U.el("span", "ux-k", l), U.el("span", "ux-big", U.fmt(x, "int"))); el.append(c);
+  });
+});
+dash.draw("radar-voces", el => {
+  el.replaceChildren(); const w = weekRows("radar_voces"); if (!w) return;
+  w.rows.forEach(r => {
+    const i = w.s.data.indexOf(r), c = U.el("div", "ux-card"), h = U.el("div", "ux-row");
+    h.style.justifyContent = "space-between"; h.style.alignItems = "center";
+    h.append(U.el("p", "ux-t", r.cuenta, ["radar_voces", "cuenta", i]), U.el("span", "ux-est " + (r.etapa && r.etapa !== "Por empezar" ? "ok" : "mute"), r.etapa || "Por empezar", ["radar_voces", "etapa", i]));
+    c.append(h, U.el("p", "ux-small", (r.usuario || "Usuario por confirmar") + " · " + (r.por_que || ""), ["radar_voces", "por_que", i]));
+    if (r.post_tema) c.append(U.el("p", "ux-p", "Post de esta semana: " + r.post_tema, ["radar_voces", "post_tema", i]));
+    if (r.comentario_sugerido) c.append(U.el("p", "ux-do", "Comentario sugerido: " + r.comentario_sugerido, ["radar_voces", "comentario_sugerido", i]));
+    const a = U.link(r.post_link || r.link, r.post_link ? "Abrir el post ↗" : "Abrir la cuenta ↗"); if (a) c.append(a);
+    el.append(c);
+  });
+});
+dash.draw("radar-negocios", el => {
+  el.replaceChildren(); const w = weekRows("radar_negocios"); if (!w) return;
+  const t = U.el("table", "ux-tbl"), hr = document.createElement("tr");
+  ["Negocio", "Rubro", "Ciudad", "Origen", "Comentario sugerido", "Etapa"].forEach(x => hr.append(U.el("th", null, x)));
+  const th = document.createElement("thead"); th.append(hr); t.append(th);
+  const tb = document.createElement("tbody");
+  w.rows.forEach(r => {
+    const i = w.s.data.indexOf(r), tr = document.createElement("tr"), td0 = U.el("td");
+    const a = U.link(r.link, (r.negocio || "") + (r.usuario ? " (" + r.usuario + ")" : "")); if (a) td0.append(a); else td0.textContent = r.negocio || "—";
+    tr.append(td0, U.el("td", null, r.rubro || "—"), U.el("td", null, r.ciudad || "—"), U.el("td", null, r.fuente || "—"), U.el("td", null, r.comentario_sugerido || "—", ["radar_negocios", "comentario_sugerido", i]), U.el("td", null, r.etapa || "Por empezar", ["radar_negocios", "etapa", i]));
+    tb.append(tr);
+  });
+  t.append(tb); el.append(t);
 });
 
 function hbar(el, rows, label, val, fmt, aria, color){
