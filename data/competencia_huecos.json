@@ -1,0 +1,48 @@
+{
+ "rows": [
+  {
+   "semana": "2026-11-23",
+   "orden": 1,
+   "hueco": "Representación propia en China",
+   "competencia": "Pinchili y Royer Herazo venden viajes en grupo a la feria. Nadie ofrece una persona en China dedicada a un solo cliente.",
+   "prueba_urbantex": "Urbantex tiene a su equipo en China trabajando para cada cliente: busca, verifica y negocia todo el año.",
+   "accion": "Reel «Viaje en grupo o representación propia: qué cambia al negociar» y, si funciona en orgánico, anuncio con ese ángulo.",
+   "formato": "Reel + anuncio",
+   "responsable": "Domingo graba · Yeni publica",
+   "fecha": "2026-12-02"
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 2,
+   "hueco": "Verificación de fábricas en el terreno",
+   "competencia": "Ningún competidor lo muestra en sus anuncios.",
+   "prueba_urbantex": "Urbantex visita la fábrica antes de que el cliente pague.",
+   "accion": "Reel grabado en una visita real: «Así se verifica una fábrica antes de pagar», con 3 puntos que se revisan.",
+   "formato": "Reel",
+   "responsable": "Domingo graba · Gaby edita",
+   "fecha": "2026-12-04"
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 3,
+   "hueco": "Comprar fuera de la temporada de feria",
+   "competencia": "Pinchili, Royer Herazo y Asesorcomex concentran su mensaje en la Feria de Cantón de abril 2027.",
+   "prueba_urbantex": "Urbantex busca y negocia por videollamada en cualquier mes (caso: repuestos de aire acondicionado automotriz).",
+   "accion": "Publicar la pieza 2 («No hace falta esperar a la feria») la semana del 30 nov y usarla como anuncio de diciembre.",
+   "formato": "Reel + anuncio",
+   "responsable": "Domingo graba · Yeni publica",
+   "fecha": "2026-12-02"
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 4,
+   "hueco": "El riesgo de comprar solo por Alibaba",
+   "competencia": "Royer Herazo enseña a comprar directamente en Alibaba a emprendedores que empiezan.",
+   "prueba_urbantex": "Urbantex distingue fábricas de intermediarios y verifica antes del pago.",
+   "accion": "Carrusel «3 señales de que un proveedor de Alibaba no es fábrica».",
+   "formato": "Carrusel",
+   "responsable": "Gaby diseña · Yeni publica",
+   "fecha": "2026-12-06"
+  }
+ ]
+}

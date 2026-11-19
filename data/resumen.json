@@ -3,17 +3,17 @@
   {
    "fecha": "2026-11-17",
    "tipo": "Diario",
-   "texto": "«Orden cambia · Nov» cerró su primer día con 4 conversaciones a $0,56 cada una; dejarla correr sin cambios y medir cuántas de esas conversaciones piden llamada."
+   "texto": "«Orden cambia · Nov» cerró su primer día con 4 conversaciones a $0,56 cada una. Se mantiene sin cambios; se medirá cuántas conversaciones pasan a llamada."
   },
   {
    "fecha": "2026-11-18",
    "tipo": "Diario",
-   "texto": "«Orden cambia · Nov» cerró su primer día completo (17 nov) con 4 conversaciones a $0,83 cada una, por debajo del límite de $1: no tocarla hasta el 20 nov y registrar en el embudo cuántas pasan a llamada."
+   "texto": "«Orden cambia · Nov» cerró el 17 nov con 4 conversaciones a $0,83 cada una, por debajo del límite de $1. Se mantiene sin cambios hasta el 20 nov."
   },
   {
    "fecha": "2026-11-19",
    "tipo": "Diario",
-   "texto": "«Orden cambia · Nov» pagó $1,37 por conversación el 18 nov, por encima del límite de $1 (promedio de sus dos días: $1,06): no cambiarla hasta el 20 nov y anotar en el embudo cuántas de sus 7 conversaciones pasaron a llamada."
+   "texto": "«Orden cambia · Nov»: $1,37 por conversación el 18 nov, sobre el límite de $1 (promedio de dos días: $1,06). Se mantiene sin cambios hasta el 20 nov; queda pendiente registrar en el embudo cuántas de las 7 conversaciones pasaron a llamada."
   }
  ]
 }
