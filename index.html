@@ -15,7 +15,7 @@ body{padding:16px}
 <script src="d3.min.js"></script>
 <script>
 window.dash = (function(){
-  const IDS = ["resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","competencia_organico","competencia_preguntas","competencia_huecos","propuestas","proxima_campana","compromisos","piezas","radar_voces","radar_negocios","embudo","alertas"];
+  const IDS = ["resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","competencia_organico","competencia_preguntas","competencia_huecos","mensaje_semanal","propuestas","proxima_campana","compromisos","piezas","radar_voces","radar_negocios","embudo","alertas"];
   const raw = {}, failed = {}, calcs = {}, draws = {}, hooks = [];
   function data(id){
     if (calcs[id]) {
@@ -166,6 +166,17 @@ window.dash = (function(){
 .ux-ad em{font-style:normal;font-size:11px;font-weight:700;color:var(--or)}
 .ux-ad span{font-size:12px;line-height:1.3;color:var(--txt2)}
 .ux-commits{display:flex;flex-direction:column;gap:10px}
+.ux-pieces{display:flex;flex-direction:column;gap:16px}
+.ux-piece{display:flex;flex-direction:column;gap:10px}
+.ux-piececols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px}
+.ux-script{margin:4px 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45}
+.ux-take{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--stone)}
+.ux-caption{white-space:pre-wrap;font-family:inherit;font-size:13.5px;line-height:1.5;background:var(--cream);border:1px solid var(--sand);border-radius:10px;padding:12px 14px;margin:4px 0 0}
+.ux-msg{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.ux-msgtext{width:100%;box-sizing:border-box;max-height:none}
+.ux-copy{font:inherit;font-size:14px;font-weight:600;background:var(--or);color:#fff;border:none;border-radius:999px;padding:9px 18px;cursor:pointer}
+.ux-copy.ok{background:var(--ok)}.ux-copy.ok::after{content:" ✓"}
+@media (max-width:760px){.ux-piececols{grid-template-columns:1fr}}
 .ux-people{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .ux-person{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--sand);border-radius:12px;padding:12px 14px}
 .ux-checks{display:flex;flex-direction:column;gap:22px}
@@ -215,6 +226,13 @@ window.dash = (function(){
 </nav>
 
 <section class="ux-page" id="resumen" data-page="resumen">
+  <div class="ux-block" id="mensaje-semana">
+    <h2 class="ux-h">Mensaje de la semana para el grupo</h2>
+    <p class="ux-sub">Texto listo para pegar en el grupo de WhatsApp cada lunes: tareas por persona, piezas y estado de los ads.</p>
+    <p class="ux-empty" data-empty="mensaje_semanal" hidden>El mensaje se genera el lunes.</p>
+    <div data-draw="mensaje" data-source="mensaje_semanal"></div>
+  </div>
+
   <div class="ux-block" id="esta-semana">
     <h2 class="ux-h">Plan de la semana</h2>
     <p class="ux-sub" data-draw="semana-sub" data-source="compromisos">—</p>
@@ -225,8 +243,8 @@ window.dash = (function(){
 
   <div class="ux-block" id="piezas-semana">
     <h2 class="ux-h">Piezas de la semana</h2>
-    <p class="ux-sub">Listas para grabar: gancho, guion, caption y llamado a la acción.</p>
-    <div class="ux-grid2" data-draw="piezas" data-source="piezas"></div>
+    <p class="ux-sub">Sugerencia de contenido, nombre del video, script por tomas y caption listo para publicar, en el formato que hoy usa la cuenta.</p>
+    <div class="ux-pieces" data-draw="piezas" data-source="piezas"></div>
   </div>
 
   <div class="ux-block" id="campanas-hoy">
@@ -316,6 +334,11 @@ window.dash = (function(){
       </table></div>
     </details>
   </div>
+  <div class="ux-block" id="actividad">
+    <h2 class="ux-h">Actividad en comentarios</h2>
+    <p class="ux-sub">Los comentarios miden si el contenido genera conversación. La meta es acercarse a la referencia de la competencia.</p>
+    <div class="ux-grid" data-draw="actividad" data-source="reels competencia_organico"></div>
+  </div>
   <div class="ux-block" id="comentarios">
     <h2 class="ux-h">Lo que más pregunta la gente</h2>
     <p class="ux-empty" data-empty="comentarios" hidden>Se llena el lunes con los comentarios de Instagram agrupados por tema.</p>
@@ -396,7 +419,7 @@ window.dash = (function(){
   <div class="ux-block" id="embudo-sem">
     <h2 class="ux-h">Por semana y campaña</h2>
     <div class="ux-scroll"><table class="ux-tbl" data-source="embudo" data-row-key="clave">
-      <thead><tr><th data-field="periodo">Semana</th><th data-field="campana">Campaña</th><th class="n" data-field="conversaciones">Chats</th><th class="n" data-field="llamadas_realizadas">Llamadas</th><th class="n" data-field="cotizaciones">Cotiz.</th><th class="n" data-field="clientes">Clientes</th><th class="n" data-source="embudo_costos" data-field="costo_llamada">$/llamada</th><th class="n" data-source="embudo_costos" data-field="costo_cliente">$/cliente</th></tr></thead>
+      <thead><tr><th data-field="periodo">Semana</th><th data-field="campana">Campaña</th><th class="n" data-field="conversaciones">Chats</th><th class="n" data-field="calificados">Calificados</th><th class="n" data-field="llamadas_realizadas">Llamadas</th><th class="n" data-field="cotizaciones">Cotiz.</th><th class="n" data-field="clientes">Clientes</th><th class="n" data-source="embudo_costos" data-field="costo_llamada">$/llamada</th><th class="n" data-source="embudo_costos" data-field="costo_cliente">$/cliente</th></tr></thead>
       <tbody data-draw="embudo"></tbody>
     </table></div>
   </div>
@@ -824,6 +847,14 @@ dash.draw("proxima", el => {
   });
 });
 
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest(".ux-copy"); if (!b) return;
+  const t = b.parentElement.querySelector(".ux-msgtext"); if (!t) return;
+  const txt = t.textContent;
+  const done = () => { b.classList.add("ok"); b.setAttribute("aria-label", "Mensaje copiado"); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, () => {}); 
+  else { const r = document.createRange(); r.selectNodeContents(t); const s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand("copy"); done(); } catch (_) {} }
+});
 (function(){
   const pickSub = (id) => {
     document.querySelectorAll("[data-subpage]").forEach(p => { p.hidden = p.getAttribute("data-subpage") !== id; });
@@ -888,19 +919,40 @@ dash.draw("huecos", el => {
 dash.draw("piezas", el => {
   el.replaceChildren(); const w = weekRows("piezas"); if (!w) return;
   w.rows.forEach(r => {
-    const i = w.s.data.indexOf(r), c = U.el("div", "ux-card");
-    c.append(U.el("span", "ux-chip or", "Pieza " + r.orden), U.el("p", "ux-t", r.titulo, ["piezas", "titulo", i]), U.el("p", "ux-small", r.formato, ["piezas", "formato", i]));
-    if (r.gancho) c.append(U.el("p", "ux-hook", "“" + r.gancho + "”", ["piezas", "gancho", i]));
-    const gu = String(r.guion || "").split("|").map(x => x.trim()).filter(Boolean);
-    if (gu.length) { c.append(U.el("span", "ux-k", "Guion")); const ol = U.el("ol", "ux-why"); ol.setAttribute("data-source", "piezas"); ol.setAttribute("data-field", "guion"); ol.setAttribute("data-row", String(i)); gu.forEach(x => ol.append(U.el("li", null, x))); c.append(ol); }
+    const i = w.s.data.indexOf(r), c = U.el("div", "ux-card ux-piece");
+    const head = U.el("div", "ux-row"); head.style.gap = "8px"; head.style.flexWrap = "wrap";
+    head.append(U.el("span", "ux-chip or", "Pieza " + r.orden), U.el("span", "ux-chip sl", r.uso || "Orgánico", ["piezas", "uso", i]));
+    if (r.tipo_contenido) head.append(U.el("span", "ux-chip", r.tipo_contenido, ["piezas", "tipo_contenido", i]));
+    c.append(head, U.el("p", "ux-hook", r.nombre_video || r.titulo, ["piezas", "nombre_video", i]));
+    const cols = U.el("div", "ux-piececols"), a = U.el("div"), b = U.el("div");
+    a.append(U.el("span", "ux-k", "Sugerencia de contenido"), U.el("p", "ux-p", r.sugerencia, ["piezas", "sugerencia", i]));
     const f = U.el("div", "ux-facts");
-    [["Caption", "caption"], ["Llamado a la acción", "cta"]].forEach(([l, k]) => { if (!r[k]) return; const d = U.el("div", "ux-fact"); d.append(U.el("span", null, l), U.el("div", null, r[k], ["piezas", k, i])); f.append(d); });
-    c.append(f);
-    if (r.por_que) c.append(U.el("p", "ux-small", "Por qué: " + r.por_que, ["piezas", "por_que", i]));
-    c.append(U.el("p", "ux-small", "Graba: " + (r.graba || "—") + " · Edita: " + (r.edita || "—")));
-    const a = U.link(r.referencia, "Ver referencia ↗"); if (a) c.append(a);
-    el.append(c);
+    [["Duración", r.duracion], ["Graba", (r.graba || "—") + (r.fecha_grabar ? " · " + U.fecha(r.fecha_grabar) : "")], ["Edita", (r.edita || "—") + (r.fecha_editar ? " · " + U.fecha(r.fecha_editar) : "")], ["Publica", r.publica]].forEach(([l, v]) => { if (!v) return; const d = U.el("div", "ux-fact"); d.append(U.el("span", null, l), U.el("div", null, v)); f.append(d); });
+    a.append(f);
+    if (r.por_que) a.append(U.el("p", "ux-small", "Por qué: " + r.por_que, ["piezas", "por_que", i]));
+    const ref = U.link(r.referencia, "Ver referencia ↗"); if (ref) a.append(ref);
+    b.append(U.el("span", "ux-k", "Script"));
+    const ol = U.el("ol", "ux-script"); ol.setAttribute("data-source", "piezas"); ol.setAttribute("data-field", "script"); ol.setAttribute("data-row", String(i));
+    String(r.script || r.guion || "").split("|").map(x => x.trim()).filter(Boolean).forEach(x => { const m = x.match(/^\[([^\]]+)\]\s*(.*)$/); const li = U.el("li"); if (m) { li.append(U.el("span", "ux-take", m[1]), U.el("span", null, m[2])); } else li.textContent = x; ol.append(li); });
+    b.append(ol, U.el("span", "ux-k", "Caption"), U.el("pre", "ux-caption", r.caption, ["piezas", "caption", i]));
+    cols.append(a, b); c.append(cols); el.append(c);
   });
+});
+dash.draw("mensaje", el => {
+  el.replaceChildren(); const w = weekRows("mensaje_semanal"); if (!w || !w.rows.length) return;
+  const r = w.rows[0], i = w.s.data.indexOf(r), box = U.el("div", "ux-msg");
+  const btn = U.el("button", "ux-copy", "Copiar mensaje"); btn.type = "button";
+  box.append(U.el("pre", "ux-caption ux-msgtext", r.texto, ["mensaje_semanal", "texto", i]), btn); el.append(box);
+});
+dash.draw("actividad", el => {
+  el.replaceChildren(); const s = dash.data("reels"); if (s.status !== "ok") return;
+  const lim = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+  const rs = s.data.filter(r => String(r.fecha) >= lim);
+  const nc = r => r.comentarios != null ? +r.comentarios : (+((String(r.nota || "").match(/(\d+)\s*comentarios/) || [])[1]) || 0);
+  const tot = rs.reduce((a, r) => a + nc(r), 0), avg = rs.length ? tot / rs.length : 0;
+  const co = dash.data("competencia_organico"); let ref = null;
+  if (co.status === "ok" && co.data.length) { const v = co.data.map(r => +r.comentarios).filter(x => x > 0).sort((a, b) => a - b); if (v.length) ref = v[Math.floor(v.length / 2)]; }
+  [["Comentarios · 30 días", U.int(tot)], ["Promedio por reel", avg.toFixed(1).replace(".", ",")], ["Reels publicados · 30 días", U.int(rs.length)], ["Referencia competencia (mediana por reel)", ref != null ? U.int(ref) : "—"]].forEach(([l, v]) => { const c = U.el("div", "ux-card ux-kpi"); c.append(U.el("span", "ux-k", l), U.el("span", "ux-big", v)); el.append(c); });
 });
 dash.draw("organico", el => {
   el.replaceChildren(); const w = weekRows("competencia_organico"); if (!w) return;
@@ -1043,7 +1095,7 @@ dash.draw("embudo", tb => {
   const c = dash.data("embudo_costos");
   const costs = (c.status === "ok" && Array.isArray(c.data)) ? c.data : [];
   const get = (r, k) => { const x = costs.find(z => z.clave === r.clave); return x ? x[k] : null; };
-  U.table(tb, "embudo", [{f:"periodo"},{f:"campana"},{f:"conversaciones",kind:"int"},{f:"llamadas_realizadas",kind:"int"},{f:"cotizaciones",kind:"int"},{f:"clientes",kind:"int"},
+  U.table(tb, "embudo", [{f:"periodo"},{f:"campana"},{f:"conversaciones",kind:"int"},{f:"calificados",kind:"int"},{f:"llamadas_realizadas",kind:"int"},{f:"cotizaciones",kind:"int"},{f:"clientes",kind:"int"},
     {get: r => get(r, "costo_llamada"), kind:"money"},{get: r => get(r, "costo_cliente"), kind:"money"}],
     {key:["clave"], sort:(a,b)=>String(b.semana_inicio).localeCompare(String(a.semana_inicio))});
 });
