@@ -1,3 +1,32 @@
 {
- "rows": []
+ "rows": [
+  {
+   "semana": "2026-11-23",
+   "tema": "Reconocimiento sin pregunta (aplausos, «crack»)",
+   "frecuencia": 6,
+   "ejemplos": "Reacciones breves de apoyo en «Cuando una orden cambia» y «Detalles que no aparecen en una cotización».",
+   "idea_contenido": "Cerrar cada reel con una pregunta concreta o palabra clave para convertir el apoyo en conversación."
+  },
+  {
+   "semana": "2026-11-23",
+   "tema": "Experiencia de cliente con proveedores de TikTok",
+   "frecuencia": 2,
+   "ejemplos": "Un cliente contó en «El precio de TikTok no es el final» que le pasó lo mismo y que con Urbantex logró sus objetivos.",
+   "idea_contenido": "Pedirle permiso a ese cliente para un testimonio corto; es prueba social espontánea."
+  },
+  {
+   "semana": "2026-11-23",
+   "tema": "Pedido de contacto directo",
+   "frecuencia": 1,
+   "ejemplos": "En «Cuando una orden cambia» preguntaron si hay un número de contacto.",
+   "idea_contenido": "Dejar el enlace de WhatsApp visible en cada caption y en un comentario fijado; responder estas preguntas el mismo día."
+  },
+  {
+   "semana": "2026-11-23",
+   "tema": "Volumen bajo de comentarios",
+   "frecuencia": 19,
+   "ejemplos": "19 comentarios en total en los 11 reels del último mes; la competencia obtiene cientos con palabra clave (Royer Herazo: 1.199 en un reel).",
+   "idea_contenido": "Aplicar palabra clave en las piezas de la semana («CALENDARIO», «FÁBRICA») y medir el cambio el próximo lunes."
+  }
+ ]
 }
