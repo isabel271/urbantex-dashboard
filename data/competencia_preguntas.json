@@ -1,3 +1,58 @@
 {
- "rows": []
+ "rows": [
+  {
+   "semana": "2026-11-23",
+   "orden": 1,
+   "tema": "Cómo conseguir un producto visto en un video, su precio y si se puede traer a Venezuela",
+   "frecuencia": 24,
+   "ejemplo": "«¿Cómo la consigo?», «¿Qué precio tiene?», «¿Se puede traer a Venezuela?»",
+   "donde": "Pinchili (laptop transformable) y All You Can China (revestimiento solar)",
+   "respuesta_sugerida": "Reel «Viste un producto en un video: así se trae a Venezuela» en 4 pasos: muestra, verificación en fábrica, costo puesto en Venezuela y envío."
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 2,
+   "tema": "Cuánto hay que invertir para empezar a importar",
+   "frecuencia": 12,
+   "ejemplo": "Debate entre quienes dicen que se empieza con poco y quienes consideran que no es rentable",
+   "donde": "Pinchili (reel de los $30, 455 comentarios) y China te Espera",
+   "respuesta_sugerida": "Pieza con el desglose de una primera compra real a fábrica, con cifras de un caso de cliente."
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 3,
+   "tema": "Permisos COMEX demorados o negados y aranceles",
+   "frecuencia": 10,
+   "ejemplo": "Quejas por permisos que tardan más de 15 días o se niegan sin explicación",
+   "donde": "Asesorcomex",
+   "respuesta_sugerida": "Pieza sobre qué documentos debe entregar la fábrica a tiempo para no frenar el permiso; el trámite aduanal se coordina con un agente aliado."
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 4,
+   "tema": "Fábrica directa o intermediario",
+   "frecuencia": 6,
+   "ejemplo": "Comentarios que celebran que alguien explique la diferencia",
+   "donde": "All You Can China",
+   "respuesta_sugerida": "Pieza «Fábrica o intermediario: cómo saberlo antes de pagar», con lo que se revisa en la visita."
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 5,
+   "tema": "Seguimiento de pedidos y respuesta de logística",
+   "frecuencia": 3,
+   "ejemplo": "Clientes que esperan semanas una confirmación de recepción",
+   "donde": "Royer Herazo (cuenta de su agencia de carga)",
+   "respuesta_sugerida": "Mostrar el reporte de avance que recibe cada cliente de Urbantex."
+  },
+  {
+   "semana": "2026-11-23",
+   "orden": 6,
+   "tema": "Cómo viajar con ellos o dónde es el curso",
+   "frecuencia": 5,
+   "ejemplo": "Preguntas por fechas de viaje a Yiwu, sede y modalidad de cursos",
+   "donde": "Royer Herazo y China te Espera",
+   "respuesta_sugerida": "No competir con viajes en grupo; comunicar la agenda personalizada de fábricas para quien viaja con Urbantex."
+  }
+ ]
 }
