@@ -35,6 +35,15 @@
    "gasto": 52.23,
    "conversaciones": 78,
    "costo_conv": 0.67
+  },
+  {
+   "clave": "2026-11-16|Orden cambia · Nov",
+   "semana_inicio": "2026-11-16",
+   "periodo": "16–22 nov",
+   "campana": "Orden cambia · Nov",
+   "gasto": 34.24,
+   "conversaciones": 29,
+   "costo_conv": 1.18
   }
  ]
 }

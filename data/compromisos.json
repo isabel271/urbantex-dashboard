@@ -9,8 +9,8 @@
    "listo_cuando": "Los clips de las 5 tomas están en la carpeta de edición.",
    "fecha": "2026-11-22",
    "verificacion": "Automática: el reel aparece publicado en Instagram (pieza 1)",
-   "estado": "Pendiente",
-   "evidencia": null,
+   "estado": "Sin confirmar",
+   "evidencia": "Al 23 nov no hay registro automático de los clips; el reel de la pieza 1 aún no aparece en Instagram (último reel publicado: «Capítulo 3/3», 22 nov).",
    "aprobar_antes": "jueves 27 nov"
   },
   {
@@ -127,7 +127,7 @@
    "fecha": "2026-11-24",
    "verificacion": "Automática: fila de la semana completa en la hoja del embudo",
    "estado": "Pendiente",
-   "evidencia": "Corte parcial registrado el 20 nov: 11 chats, 1 calificado, 0 llamadas, 0 cotizaciones. Falta el cierre del lunes 24.",
+   "evidencia": "Al 23 nov la hoja sigue con el corte parcial del 20 nov: 11 conversaciones, 1 calificado, 0 llamadas. Meta registra 29 conversaciones del 16 al 22 nov.",
    "aprobar_antes": "jueves 27 nov"
   },
   {
