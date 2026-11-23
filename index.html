@@ -15,7 +15,7 @@ body{padding:16px}
 <script src="d3.min.js"></script>
 <script>
 window.dash = (function(){
-  const IDS = ["resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","competencia_organico","competencia_preguntas","competencia_huecos","mensaje_semanal","propuestas","proxima_campana","compromisos","piezas","radar_voces","radar_negocios","embudo","alertas"];
+  const IDS = ["inventario","aprobaciones","resumen","campanas","ads_diario","ads_semanal","ads_anuncios","reels","ranking","comentarios","competidores","competencia_temas","competencia_anuncios","competencia_organico","competencia_preguntas","competencia_huecos","mensaje_semanal","propuestas","proxima_campana","compromisos","piezas","radar_voces","radar_negocios","embudo","alertas"];
   const raw = {}, failed = {}, calcs = {}, draws = {}, hooks = [];
   function data(id){
     if (calcs[id]) {
@@ -42,7 +42,7 @@ window.dash = (function(){
     let t; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(render, 200); });
   });
   return {
-    data, draw:(n, fn) => { draws[n] = fn; }, calc:(id, d) => { calcs[id] = d; }, onData:fn => hooks.push(fn),
+    data, draw:(n, fn) => { if (typeof fn === "function") { draws[n] = fn; return; } if (draws[n]) document.querySelectorAll('[data-draw="' + n + '"]').forEach(el => { try { draws[n](el); } catch(e) { console.error(n, e); } }); }, calc:(id, d) => { calcs[id] = d; }, onData:fn => hooks.push(fn),
     setLink:id => { try { history.replaceState(null, "", "#" + id); } catch(e) {} }
   };
 })();
@@ -207,6 +207,51 @@ window.dash = (function(){
 .ux-orggroup h3{margin:0;font-size:15px;font-weight:700;color:var(--ink)}
 @media (max-width:640px){.ux-commit{grid-template-columns:1fr}}
 @media (max-width:640px){.ux-nx{grid-template-columns:1fr}.ux-nx .side{flex-direction:row;align-items:center}.ux-nx .side .ux-thumb,.ux-nx .todo{width:90px;flex:none}}
+.ux-legend{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.ux-legend li{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2)}
+.ux-dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--sand)}
+.st-pub{background:var(--ok)}.st-rev{background:var(--or)}.st-apr{background:var(--slate)}.st-prod{background:var(--warn)}.st-listo{background:#6B4FA0}.st-idea{background:#B9B1A5}.st-hueco{background:transparent;border:1.5px dashed var(--stone)}
+.ux-month{display:flex;flex-direction:column;gap:10px}
+.ux-month h3{margin:6px 0 0;font-size:15px;font-weight:700;text-transform:capitalize}
+.ux-week{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;padding:10px 0;border-top:1px solid var(--sand)}
+.ux-week.now{background:#FFF4EA;border-radius:10px;padding:10px 8px}
+.ux-week-l{font-size:12px;font-weight:600;color:var(--stone);padding-top:8px}
+.ux-week.now .ux-week-l{color:#7A3410}
+.ux-week-c{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.ux-pc{font:inherit;text-align:left;display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--sand);border-radius:10px;padding:8px 10px;cursor:pointer;min-width:0;color:var(--ink)}
+.ux-pc:hover{border-color:var(--or)}
+.ux-pc.sel{outline:2px solid var(--or);outline-offset:1px}
+.ux-pc.hueco{background:transparent;border-style:dashed;color:var(--stone)}
+.ux-pc .ux-thumb{width:34px;border-radius:6px;font-size:12px}
+.ux-pc-m{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ux-pc-t{font-size:13px;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ux-pc-s{font-size:11px;color:var(--stone);display:flex;align-items:center;gap:5px}
+.ux-board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:12px;overflow-x:auto;padding-bottom:6px}
+.ux-col{background:#F1EBE2;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ux-col h3{margin:0;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+.ux-col h3 span.n{margin-left:auto;font-weight:600;color:var(--stone);font-variant-numeric:tabular-nums}
+.ux-fi{background:var(--card);border:1px solid var(--sand);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.ux-fi-h{display:flex;gap:14px;align-items:flex-start}
+.ux-fi-h .ux-thumb{width:84px}
+.ux-fi-hm{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ux-fi-tt{margin:0;font-size:19px;font-weight:600;line-height:1.3}
+.ux-fi-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.ux-fi-sec{display:flex;flex-direction:column;gap:6px}
+.ux-fi-sec h4{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--stone);font-weight:600}
+.ux-fi-sec p{margin:0;font-size:14px;line-height:1.5;color:var(--txt2);white-space:pre-line}
+.ux-fi-q{font-family:var(--font-anthropic-serif);font-size:18px!important;color:var(--ink)!important}
+.ux-fi-warn{font-size:13px;margin:0;padding:8px 10px;border-radius:8px;background:#FCEFD6;color:#8A5A0B;line-height:1.4}
+.ux-fi-red{border:1px solid var(--sand);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.ux-fi-red b{font-size:12px;color:var(--ink)}
+.ux-fi-red p{font-size:13px}
+.ux-ap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.ux-ap-i{border:1px solid var(--sand);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:#FBF8F3}
+.ux-ap-i .who{font-size:12px;color:var(--stone)}
+.ux-ap-b{font:inherit;font-size:13px;font-weight:600;border-radius:8px;padding:8px 12px;border:1px solid var(--or);background:var(--or);color:#fff;cursor:pointer;align-self:flex-start}
+.ux-ap-b[disabled]{background:#E9E3DA;border-color:#DDD5C9;color:#9A948B;cursor:not-allowed}
+.ux-ap-b.ghost{background:transparent;color:var(--stone);border-color:var(--sand);font-weight:500}
+.ux-ap-ok{font-size:13px;font-weight:600;color:var(--ok)}
+@media (max-width:640px){.ux-week{grid-template-columns:1fr;gap:6px}.ux-week-l{padding-top:0}}
 </style>
 
 <div class="ux" data-read lang="es">
@@ -218,6 +263,7 @@ window.dash = (function(){
 
 <nav class="ux-tabs" role="tablist" aria-label="Secciones">
   <button class="ux-tab on" role="tab" aria-selected="true" data-tab="resumen">Resumen</button>
+  <button class="ux-tab" role="tab" aria-selected="false" data-tab="calendario">Calendario</button>
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="ads">Ads</button>
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="contenido">Contenido</button>
   <button class="ux-tab" role="tab" aria-selected="false" data-tab="competencia">Competencia</button>
@@ -277,6 +323,47 @@ window.dash = (function(){
     </div>
   </div>
 
+</section>
+
+<section class="ux-page" id="calendario" data-page="calendario" hidden>
+  <div class="ux-block" id="cal-mes">
+    <h2 class="ux-h">Calendario de contenido</h2>
+    <p class="ux-sub">Todo lo que se publica, en un solo lugar: piezas del plan de ferias, lo ya publicado y los espacios reservados para contenido que ya existe. Al tocar una pieza se abre su ficha.</p>
+    <ul class="ux-legend">
+      <li><span class="ux-dot st-pub"></span>Publicado</li>
+      <li><span class="ux-dot st-rev"></span>Guion en revisión</li>
+      <li><span class="ux-dot st-apr"></span>Aprobado para grabar</li>
+      <li><span class="ux-dot st-prod"></span>En producción</li>
+      <li><span class="ux-dot st-listo"></span>Video listo</li>
+      <li><span class="ux-dot st-idea"></span>Idea</li>
+      <li><span class="ux-dot st-hueco"></span>Por llenar</li>
+    </ul>
+    <p class="ux-empty" data-empty="inventario" hidden>Todavía no hay piezas en el calendario.</p>
+    <div data-draw="cal-mes" data-source="inventario_estado reels"></div>
+  </div>
+
+  <div class="ux-block" id="pieza-ficha">
+    <h2 class="ux-h">Ficha de la pieza</h2>
+    <p class="ux-sub">Guion, textos para cada red y aprobaciones. Todos pueden verla; solo aprueba quien tiene acceso de edición en Claude.</p>
+    <div data-draw="inv-ficha" data-source="inventario_estado aprobaciones reels"></div>
+  </div>
+
+  <div class="ux-block" id="inventario">
+    <h2 class="ux-h">Inventario por estado</h2>
+    <p class="ux-sub">En qué punto está cada pieza, desde la idea hasta la publicación. Las ideas sin fecha esperan un espacio en el calendario.</p>
+    <div class="ux-board" data-draw="inv-board" data-source="inventario_estado reels"></div>
+  </div>
+
+  <details class="ux-more" id="como-se-aprueba"><summary>Cómo se aprueba cada pieza</summary>
+    <ul>
+      <li>Guion: lo revisan y aprueban Yeni y Domingo.</li>
+      <li>Captions y textos por red: los revisan y aprueban Yeni y Domingo.</li>
+      <li>Video final: Domingo lo aprueba antes de publicar, cuando Gaby lo sube al Drive.</li>
+      <li>Con el guion y los textos aprobados, la pieza pasa a «Aprobado para grabar».</li>
+      <li>El botón de aprobar funciona en la versión de Claude para quien tiene acceso de edición. En la copia del equipo se ve, pero no se puede usar.</li>
+      <li>Los estados de grabación y edición se actualizan con lo que aparece en el Drive; «Publicado» se detecta en Instagram.</li>
+    </ul>
+  </details>
 </section>
 
 <section class="ux-page" id="ads" data-page="ads" hidden>
@@ -1099,6 +1186,254 @@ dash.draw("embudo", tb => {
     {get: r => get(r, "costo_llamada"), kind:"money"},{get: r => get(r, "costo_cliente"), kind:"money"}],
     {key:["clave"], sort:(a,b)=>String(b.semana_inicio).localeCompare(String(a.semana_inicio))});
 });
+</script>
+<script>
+(function(){
+  const E = U.el;
+  const ESTADOS = [
+    {k:"Idea", c:"st-idea"},
+    {k:"Guion en revisión", c:"st-rev"},
+    {k:"Aprobado para grabar", c:"st-apr"},
+    {k:"En producción", c:"st-prod"},
+    {k:"Video listo", c:"st-listo"},
+    {k:"Publicado", c:"st-pub"}
+  ];
+  const cls = (e) => e === "Por llenar" ? "st-hueco" : ((ESTADOS.find(x => x.k === e) || {}).c || "st-idea");
+  const TIPOS = [
+    {t:"guion", label:"Guion", who:"Aprueban Yeni y Domingo"},
+    {t:"caption", label:"Captions y textos por red", who:"Aprueban Yeni y Domingo"},
+    {t:"video", label:"Video final", who:"Aprueba Domingo"}
+  ];
+  const dias = ["dom","lun","mar","mié","jue","vie","sáb"];
+  const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  const mc = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  const toT = (s) => Date.parse(String(s) + "T00:00:00Z");
+  const DAY = 86400000;
+  const safeDrive = (u) => typeof u === "string" && /^https:\/\/(drive|docs)\.google\.com\//.test(u) ? u : null;
+
+  let SEL = null, CAN = false, DB = null, UID = null, MSG = null;
+
+  (async () => {
+    try {
+      if (window.claude && typeof claude.use === "function") {
+        const [db, user] = await Promise.all([claude.use("db"), claude.use("user")]);
+        if (db && user && await user.canEdit()) { DB = db; CAN = true; try { UID = await user.id(); } catch (e) {} }
+      }
+    } catch (e) { CAN = false; }
+    dash.draw("inv-ficha");
+  })();
+
+  dash.calc("inventario_estado", {
+    title: "Inventario con aprobaciones",
+    description: "Estado de cada pieza: el del inventario, ajustado con las aprobaciones guardadas en el dashboard.",
+    inputs: ["inventario", "aprobaciones"],
+    fn: (inventario, aprobaciones) => {
+      const ok = new Set((aprobaciones || []).map(a => a.codigo + "__" + a.tipo));
+      return (inventario || []).map(r => {
+        let e = r.estado;
+        if (e === "Grabado" || e === "En edición") e = "En producción";
+        if (e === "Listo" || e === "Programado") e = "Video listo";
+        if (e === "Guion en revisión" && ok.has(r.codigo + "__guion") && ok.has(r.codigo + "__caption")) e = "Aprobado para grabar";
+        return Object.assign({}, r, {estado_actual: e});
+      });
+    }
+  });
+
+  function reelOf(link){
+    const s = dash.data("reels");
+    if (s.status !== "ok" || !link) return null;
+    return s.data.find(x => x.link === link) || null;
+  }
+  function fechaCorta(s){ if (!s) return "Sin fecha"; const d = new Date(toT(s)); return dias[d.getUTCDay()] + " " + d.getUTCDate() + " " + mc[d.getUTCMonth()]; }
+  function select(code){
+    SEL = code; MSG = null;
+    dash.draw("inv-ficha"); dash.draw("cal-mes"); dash.draw("inv-board");
+    const f = document.getElementById("pieza-ficha");
+    if (f && f.scrollIntoView) f.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  function card(r){
+    const hueco = r.estado_actual === "Por llenar";
+    const b = E("button", "ux-pc" + (hueco ? " hueco" : "") + (SEL === r.codigo ? " sel" : ""));
+    b.type = "button";
+    const rl = reelOf(r.link);
+    if (rl) { const t = U.thumb(rl); const img = t.querySelector("img"); const box = E("span", "ux-thumb"); if (img) box.appendChild(img.cloneNode()); else box.textContent = "▶"; b.appendChild(box); }
+    else b.appendChild(E("span", "ux-dot " + cls(r.estado_actual)));
+    const m = E("span", "ux-pc-m");
+    m.appendChild(E("span", "ux-pc-t", r.titulo || "—"));
+    const s = E("span", "ux-pc-s");
+    s.append(document.createTextNode(fechaCorta(r.fecha) + (r.formato ? " · " + r.formato : "")));
+    m.appendChild(s);
+    const st = E("span", "ux-pc-s", r.estado_actual, ["inventario_estado", "estado_actual", 0]);
+    st.removeAttribute("data-row"); st.setAttribute("data-where", "codigo=" + encodeURIComponent(r.codigo));
+    m.appendChild(st);
+    b.appendChild(m);
+    b.addEventListener("click", () => select(r.codigo));
+    return b;
+  }
+  function defaultSel(rows){
+    const now = Date.now() - DAY;
+    const next = rows.filter(r => r.fecha && toT(r.fecha) >= now && r.estado_actual !== "Por llenar" && r.estado_actual !== "Publicado")
+      .sort((a, b) => toT(a.fecha) - toT(b.fecha));
+    return next.length ? next[0].codigo : (rows[0] && rows[0].codigo);
+  }
+
+  dash.draw("cal-mes", (el) => {
+    const s = dash.data("inventario_estado");
+    el.replaceChildren();
+    if (s.status !== "ok") { el.textContent = s.status === "error" ? "No se pudo cargar el calendario." : "—"; return; }
+    const rows = s.data.filter(r => r.fecha).sort((a, b) => toT(a.fecha) - toT(b.fecha) || String(a.codigo).localeCompare(String(b.codigo)));
+    if (!rows.length) return;
+    const today = new Date(); const tUTC = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+    const monday = (t) => { const d = new Date(t); const wd = (d.getUTCDay() + 6) % 7; return t - wd * DAY; };
+    const weeks = d3.groups(rows, r => monday(toT(r.fecha)));
+    const byMonth = d3.groups(weeks, ([wk]) => { const d = new Date(wk + 3 * DAY); return d.getUTCFullYear() + "-" + d.getUTCMonth(); });
+    byMonth.forEach(([ym, wl]) => {
+      const mo = E("div", "ux-month");
+      const y = +ym.split("-")[0], mi = +ym.split("-")[1];
+      mo.appendChild(E("h3", null, meses[mi] + " " + y));
+      wl.forEach(([wk, items]) => {
+        const end = wk + 6 * DAY, a = new Date(wk), z = new Date(end);
+        const wkEl = E("div", "ux-week" + (tUTC >= wk && tUTC <= end ? " now" : ""));
+        const lbl = a.getUTCMonth() === z.getUTCMonth() ? a.getUTCDate() + "–" + z.getUTCDate() + " " + mc[z.getUTCMonth()] : a.getUTCDate() + " " + mc[a.getUTCMonth()] + " – " + z.getUTCDate() + " " + mc[z.getUTCMonth()];
+        wkEl.appendChild(E("div", "ux-week-l", (tUTC >= wk && tUTC <= end ? "Esta semana · " : "") + lbl));
+        const c = E("div", "ux-week-c");
+        items.forEach(r => c.appendChild(card(r)));
+        wkEl.appendChild(c);
+        mo.appendChild(wkEl);
+      });
+      el.appendChild(mo);
+    });
+  });
+
+  dash.draw("inv-board", (el) => {
+    const s = dash.data("inventario_estado");
+    el.replaceChildren();
+    if (s.status !== "ok") { el.textContent = s.status === "error" ? "No se pudo cargar el inventario." : "—"; return; }
+    const rows = s.data.filter(r => r.estado_actual !== "Por llenar");
+    ESTADOS.forEach(st => {
+      let items = rows.filter(r => r.estado_actual === st.k);
+      items.sort((a, b) => (a.fecha ? toT(a.fecha) : 9e15) - (b.fecha ? toT(b.fecha) : 9e15));
+      const total = items.length;
+      if (st.k === "Publicado") items = items.slice(-6).reverse();
+      const col = E("div", "ux-col");
+      const h = E("h3"); h.append(E("span", "ux-dot " + st.c), document.createTextNode(st.k), E("span", "n", String(total)));
+      col.appendChild(h);
+      if (!items.length) col.appendChild(E("p", "ux-small", "Nada en este estado."));
+      items.forEach(r => col.appendChild(card(r)));
+      if (st.k === "Publicado" && total > items.length) col.appendChild(E("p", "ux-small", "Se muestran los 6 más recientes."));
+      el.appendChild(col);
+    });
+  });
+
+  async function approve(code, tipo, undo){
+    if (!CAN || !DB) return;
+    const id = code + "__" + tipo;
+    try {
+      if (undo) await DB.doc("data/contenido/aprobaciones/" + id).delete();
+      else await DB.doc("data/contenido/aprobaciones/" + id).set({codigo: code, tipo: tipo, at: new Date().toISOString(), by: UID});
+      MSG = null;
+    } catch (e) { MSG = "No se guardó la aprobación. Se necesita acceso de edición al dashboard."; }
+    dash.draw("inv-ficha");
+  }
+
+  function sec(parent, title, text, cl){
+    if (!text) return;
+    const d = E("div", "ux-fi-sec"); d.appendChild(E("h4", null, title)); d.appendChild(E("p", cl || null, text)); parent.appendChild(d);
+  }
+
+  dash.draw("inv-ficha", (el) => {
+    const s = dash.data("inventario_estado");
+    el.replaceChildren();
+    if (s.status !== "ok") { el.textContent = s.status === "error" ? "No se pudo cargar la ficha." : "—"; return; }
+    if (!s.data.length) return;
+    if (!SEL || !s.data.some(r => r.codigo === SEL)) SEL = defaultSel(s.data);
+    const r = s.data.find(x => x.codigo === SEL);
+    if (!r) return;
+    const ap = dash.data("aprobaciones");
+    const aps = ap.status === "ok" ? ap.data : [];
+    const fi = E("div", "ux-fi");
+
+    const hd = E("div", "ux-fi-h");
+    const rl = reelOf(r.link);
+    if (rl) hd.appendChild(U.thumb(rl)); else { const t = E("div", "ux-thumb", r.formato === "Carrusel" ? "▦" : "▶"); hd.appendChild(t); }
+    const ht = E("div", "ux-fi-hm");
+    const chips = E("div", "ux-row");
+    chips.appendChild(E("span", "ux-chip " + (r.estado_actual === "Publicado" ? "ok" : r.estado_actual === "Guion en revisión" ? "or" : r.estado_actual === "Aprobado para grabar" ? "sl" : ""), r.estado_actual));
+    if (r.formato) chips.appendChild(E("span", "ux-chip", r.formato + (r.duracion ? " · " + r.duracion : "")));
+    ht.appendChild(chips);
+    ht.appendChild(E("p", "ux-fi-tt", r.titulo || "—"));
+    const meta = [fechaCorta(r.fecha), r.origen, r.objetivo].filter(Boolean).join(" · ");
+    ht.appendChild(E("p", "ux-small", meta));
+    if (r.formato_guion) ht.appendChild(E("p", "ux-small", "Guion: " + r.formato_guion));
+    hd.appendChild(ht);
+    fi.appendChild(hd);
+
+    if (r.nota) fi.appendChild(E("p", "ux-do", r.nota));
+    if (r.falta_dato) fi.appendChild(E("p", "ux-fi-warn", "Falta dato real: " + r.falta_dato));
+
+    if (r.estado_actual === "Publicado") {
+      if (rl) {
+        const g = E("div", "ux-row");
+        g.append(U.stat("vistas", rl.vistas), U.stat("guardados", rl.guardados), U.stat("compartidos", rl.compartidos), U.stat("comentarios", rl.comentarios));
+        fi.appendChild(g);
+        const a = U.link(rl.link, "Ver en Instagram"); if (a) fi.appendChild(a);
+      }
+      el.appendChild(fi); return;
+    }
+    if (r.estado_actual === "Por llenar") { el.appendChild(fi); return; }
+
+    const g = E("div", "ux-fi-g");
+    const left = E("div", "ux-fi-sec");
+    sec(left, "Gancho", r.gancho, "ux-fi-q");
+    sec(left, "Texto en pantalla", r.texto_pantalla);
+    sec(left, "Desarrollo", r.desarrollo);
+    sec(left, "Idea", r.idea);
+    sec(left, "Cierre y CTA", r.cierre);
+    sec(left, "Material", r.material);
+    const resp = [r.guion_resp ? "Guion: " + r.guion_resp : null, r.graba ? "Graba: " + r.graba : null, r.edita ? "Edita: " + r.edita : null, r.aprueba_video ? "Aprueba el video: " + r.aprueba_video : null].filter(Boolean).join(" · ");
+    sec(left, "Responsables", resp);
+    g.appendChild(left);
+
+    const right = E("div", "ux-fi-sec");
+    right.appendChild(E("h4", null, "Textos por red"));
+    const redes = [["Instagram", r.caption_instagram], ["TikTok", r.caption_tiktok], ["YouTube Shorts · título", r.titulo_youtube], ["LinkedIn", r.texto_linkedin], ["Estado de WhatsApp", r.estado_whatsapp]];
+    let any = false;
+    redes.forEach(([n, t]) => { if (!t) return; any = true; const b = E("div", "ux-fi-red"); b.appendChild(E("b", null, n)); b.appendChild(E("p", null, t)); right.appendChild(b); });
+    if (!any) right.appendChild(E("p", "ux-small", "Los textos por red se generan al pasar la pieza a la ficha nueva."));
+    if (r.palabra_clave) right.appendChild(E("p", "ux-small", "Palabra clave para medir en WhatsApp: " + r.palabra_clave));
+    const drive = safeDrive(r.link_drive);
+    if (drive) { const a = E("a", "ux-link", "Ver el video en el Drive"); a.href = drive; a.target = "_blank"; a.rel = "noopener noreferrer"; right.appendChild(a); }
+    g.appendChild(right);
+    fi.appendChild(g);
+
+    const apw = E("div", "ux-fi-sec");
+    apw.appendChild(E("h4", null, "Aprobaciones"));
+    const grid = E("div", "ux-ap");
+    TIPOS.forEach(tp => {
+      const box = E("div", "ux-ap-i");
+      box.appendChild(E("b", null, tp.label));
+      box.appendChild(E("span", "who", tp.who));
+      const done = aps.find(a => a.codigo === r.codigo && a.tipo === tp.t);
+      if (done) {
+        box.appendChild(E("span", "ux-ap-ok", "Aprobado" + (done.at ? " el " + U.fecha(String(done.at).slice(0, 10)) : "")));
+        if (CAN) { const u = E("button", "ux-ap-b ghost", "Deshacer"); u.type = "button"; u.addEventListener("click", () => approve(r.codigo, tp.t, true)); box.appendChild(u); }
+      } else {
+        const needsVideo = tp.t === "video" && !drive;
+        const b = E("button", "ux-ap-b", "Aprobar"); b.type = "button";
+        b.disabled = !CAN || needsVideo;
+        if (CAN && !needsVideo) b.addEventListener("click", () => approve(r.codigo, tp.t, false));
+        box.appendChild(b);
+        if (needsVideo) box.appendChild(E("span", "who", "Se habilita cuando el video esté en el Drive."));
+        else if (!CAN) box.appendChild(E("span", "who", "Solo se aprueba desde Claude, con acceso de edición."));
+      }
+      grid.appendChild(box);
+    });
+    apw.appendChild(grid);
+    if (MSG) apw.appendChild(E("p", "ux-fi-warn", MSG));
+    fi.appendChild(apw);
+    el.appendChild(fi);
+  });
+})();
 </script>
 
 <p class="ux-copy">Copia del dashboard de Urbantex para el equipo · Se actualiza cada mañana y los lunes · Confidencial: no compartir fuera del equipo</p>
